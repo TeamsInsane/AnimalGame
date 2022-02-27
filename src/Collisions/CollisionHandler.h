@@ -16,13 +16,16 @@ private:
     CollisionHandler();
     static CollisionHandler *instance;
 
+    int mapTileSize, mapHeight, mapWidth;
+
     TileMap collisionTileMap;
-    TileLayer *collisionLayer;
 public:
     static  CollisionHandler *getInstance();
 
     bool checkCollision(SDL_Rect a, SDL_Rect b);
     bool mapCollision(SDL_Rect a);
+
+    void setCollisionMap(TileMap tileMap, int tileSize);
 };
 
 

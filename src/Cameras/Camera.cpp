@@ -21,10 +21,11 @@ void Camera::update(float dt) {
 
         if (viewBox.y < 0) viewBox.y = 0;
 
-        if (viewBox.x > (2 * SCREEN_WIDTH - viewBox.w)) viewBox.x = (2 * SCREEN_WIDTH - viewBox.w);
+        if (viewBox.x > (sceneWidth - viewBox.x)) viewBox.x = (sceneWidth - viewBox.w);
 
-        if (viewBox.y > (2 * SCREEN_HEIGHT - viewBox.h)) viewBox.y = (2 * SCREEN_HEIGHT - viewBox.h);
+        if (viewBox.y > (sceneHeight - viewBox.h)) viewBox.y = (sceneHeight - viewBox.h);
 
         position = Vector2D(viewBox.x, viewBox.y);
     }
+
 }

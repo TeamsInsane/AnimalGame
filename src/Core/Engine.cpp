@@ -11,9 +11,8 @@
 #include "../Inputs/Input.h"
 #include "../Timers/Timer.h"
 #include "../Maps/MapParser.h"
-#include "../Cameras/Camera.h"
-#include "../Characters/Enemy.h"
 #include "../Factory/ObjectFactory.h"
+#include "../Sound/SoundManager.h"
 
 Engine* Engine::instance = nullptr;
 
@@ -47,7 +46,23 @@ bool Engine::init(){
         return false;
     }
 
+    if (!SoundManager::getInstance()->parseSounds("../assets/sounds.tml")){
+        SDL_Log("failed to parse sounds: %s", SDL_GetError());
+        return false;
+    }
+
     levelMap = MapParser::getInstance()->getMaps("MAP");
+
+    TileLayer *collisionLayer = (TileLayer*) levelMap->getMapLayers().back();
+
+    int tileSize = collisionLayer->getTileSize();
+    int width = collisionLayer->getWidth()*tileSize;
+    int height = collisionLayer->getHeight()*tileSize;
+
+    Camera::getInstance()->setSceneLimit(width, height);
+
+    CollisionHandler::getInstance()->setCollisionMap(collisionLayer->getTileMap(), tileSize);
+
     TextureManager::getInstance()->parseTextures("../assets/textures.tml");
 
     Properties *playerProperties = new Properties("player", 100, 200, 32, 32);
@@ -59,6 +74,8 @@ bool Engine::init(){
     gameObject.push_back(player);
     gameObject.push_back(boss);
     Camera::getInstance()->setTarget(player->getOrigin());
+
+    SoundManager::getInstance()->playMusic("banger");
 
     running = true;
     return running;

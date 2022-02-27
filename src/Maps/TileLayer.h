@@ -31,6 +31,10 @@ public:
     virtual void render();
     virtual void update();
     TileMap getTileMap() {return tileMap;}
+
+    int getWidth() const {return colCount;}
+    int getHeight() const {return rowCount;}
+    int getTileSize() const {return tileSize;}
 };
 
 
