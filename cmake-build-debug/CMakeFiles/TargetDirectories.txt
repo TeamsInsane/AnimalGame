@@ -1,0 +1,3 @@
+C:/Users/Uporabnik/Desktop/Coding/c++/AnimalGame/cmake-build-debug/CMakeFiles/AnimalGame.dir
+C:/Users/Uporabnik/Desktop/Coding/c++/AnimalGame/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Uporabnik/Desktop/Coding/c++/AnimalGame/cmake-build-debug/CMakeFiles/rebuild_cache.dir

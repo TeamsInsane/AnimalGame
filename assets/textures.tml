@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textures>
+    <texture id="player_idle" source="../assets/player/player_idle.png"/>
+    <texture id="player_run" source="../assets/player/player_run.png"/>
+    <texture id="player_jump" source="../assets/player/player_jump.png"/>
+    <texture id="player_fall" source="../assets/player/player_fall.png"/>
+    <texture id="player_crouch" source="../assets/player/player_crouch.png"/>
+    <texture id="player_attack" source="../assets/player/player_attack.png"/>
+    <texture id="bg" source="../assets/images/Background.png"/>
+
+    <texture id="boss_idle1" source="../assets/boss/idle1.png"/>
+    <texture id="boss_idle2" source="../assets/boss/idle2.png"/>
+    <texture id="boss_idle3" source="../assets/boss/idle3.png"/>
+    <texture id="boss_idle4" source="../assets/boss/idle4.png"/>
+    <texture id="boss_idle5" source="../assets/boss/idle5.png"/>
+    <texture id="boss_idle6" source="../assets/boss/idle6.png"/>
+    <texture id="boss_idle7" source="../assets/boss/idle7.png"/>
+    <texture id="boss_idle8" source="../assets/boss/idle8.png"/>
+
+    <texture id="boss_attack1_1" source="../assets/boss/attack1_1.png"/>
+    <texture id="boss_attack1_2" source="../assets/boss/attack1_2.png"/>
+    <texture id="boss_attack1_3" source="../assets/boss/attack1_3.png"/>
+    <texture id="boss_attack1_4" source="../assets/boss/attack1_4.png"/>
+    <texture id="boss_attack1_5" source="../assets/boss/attack1_5.png"/>
+    <texture id="boss_attack1_6" source="../assets/boss/attack1_6.png"/>
+    <texture id="boss_attack1_7" source="../assets/boss/attack1_7.png"/>
+    <texture id="boss_attack1_8" source="../assets/boss/attack1_8.png"/>
+</textures>
