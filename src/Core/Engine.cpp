@@ -8,13 +8,12 @@
 #include <SDL_ttf.h>
 #include "../Graphics/TextureManager.h"
 #include <SDL_image.h>
-#include "../Characters/Warrior.h"
 #include "../Inputs/Input.h"
 #include "../Timers/Timer.h"
 #include "../Maps/MapParser.h"
-#include "../Factory/ObjectFactory.h"
 #include "../Sound/SoundManager.h"
 #include "../ScreenText/TextDisplays.h"
+#include "../Game/Play.h"
 
 Engine* Engine::instance = nullptr;
 Warrior *player = nullptr;
@@ -49,49 +48,7 @@ bool Engine::init(){
         return false;
     }
 
-    if (!MapParser::getInstance()->load("../assets/maps/map.tmx")){
-        SDL_Log("failed to load map: %s", SDL_GetError());
-        return false;
-    }
-
-    if (!SoundManager::getInstance()->parseSounds("../assets/sounds.tml")){
-        SDL_Log("failed to parse sounds: %s", SDL_GetError());
-        return false;
-    }
-
-    levelMap = MapParser::getInstance()->getMaps("MAP");
-
-    TileLayer *collisionLayer = (TileLayer*) levelMap->getMapLayers().back();
-
-    parallaxBg.push_back(new ImgLayer("bg", 0, 0, 1920, 1080, 0.2, 1, 1));
-
-    int tileSize = collisionLayer->getTileSize();
-    int width = collisionLayer->getWidth()*tileSize;
-    int height = collisionLayer->getHeight()*tileSize;
-
-    Camera::getInstance()->setSceneLimit(width, height);
-
-    CollisionHandler::getInstance()->setCollisionMap(collisionLayer->getTileMap(), tileSize);
-
-    TextureManager::getInstance()->parseTextures("../assets/textures.tml");
-
-    player = new Warrior(new Properties("player", 100, 200, 32, 32));
-
-    //Properties *playerProperties = new Properties("player", 100, 200, 32, 32);
-    //GameObject *player = ObjectFactory::getInstance()->createObject("PLAYER", playerProperties);
-
-    Properties *animalProperties = new Properties("animal_idle", 150, 200, 48, 48);
-    GameObject *animal = ObjectFactory::getInstance()->createObject("ANIMAL", animalProperties);
-
-    Properties *bossProperties = new Properties("boss_idle", 400, 100, 250, 250);
-    GameObject *boss = ObjectFactory::getInstance()->createObject("ENEMY", bossProperties);
-
-    gameObject.push_back(player);
-    gameObject.push_back(boss);
-    gameObject.push_back(animal);
-    Camera::getInstance()->setTarget(player->getOrigin());
-
-    SoundManager::getInstance()->playMusic("banger");
+    Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject);
 
     running = true;
     return running;
@@ -100,13 +57,7 @@ void Engine::update(){
     float dt = Timer::getInstance()->getDeltaTime();
     for(int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
     player->update(dt);
-    SoundManager::getInstance()->update();
-    if (!SoundManager::getInstance()->getMusicSetting() && Mix_PlayingMusic()) Mix_PauseMusic();
-    if (player->getIsJumpingOrFalling() && SoundManager::getInstance()->getMusicSetting()){
-        Mix_ResumeMusic();
-    } else {
-        Mix_PauseMusic();
-    }
+    SoundManager::getInstance()->update(player);
 
     Camera::getInstance()->update(dt);
 
@@ -122,7 +73,7 @@ void Engine::render(){
     SDL_RenderClear(renderer);
 
     for(int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
-    //TextureManager::getInstance()->drawTexture("bg", 0, 0, 1920, 1080, 0.5, 0.5, 0.5);
+
     levelMap->render();
 
     player->draw();

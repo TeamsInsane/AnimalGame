@@ -11,6 +11,7 @@
 #include <SDL_mixer.h>
 #include <SDL_log.h>
 #include "../Vendor/tinyxml.h"
+#include "../Characters/Warrior.h"
 
 #define FREQ 44100
 #define CHUNK_SIZE 2048
@@ -37,7 +38,7 @@ public:
 
     static SoundManager *getInstance();
     bool getMusicSetting() const{return music;}
-    void update();
+    void update(Warrior *player);
 };
 
 

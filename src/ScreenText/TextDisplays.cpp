@@ -32,7 +32,6 @@ void TextDisplays::draw(float x, float y) {
     SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
     SDL_FreeSurface(surfaceMessage);
-    surfaceMessage = nullptr;
 
     SDL_Rect Message_rect; //create a rect
     Message_rect.x = 0;  //controls the rect's x coordinate

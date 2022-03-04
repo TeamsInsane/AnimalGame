@@ -16,6 +16,8 @@
 static Registrar<Warrior> registrar("PLAYER");
 
 Warrior::Warrior(Properties* properties): Character(properties) {
+    isSpawned = false;
+    isGrounded = false;
     jumpTime = JUMP_TIME;
     jumpForce = JUMP_FORCE;
     attackTime = ATTACK_TIME;
@@ -24,7 +26,7 @@ Warrior::Warrior(Properties* properties): Character(properties) {
     collider->setBuffer(-10, 4, 78, 60);
 
     rigidBody = new RigidBody();
-    rigidBody->setGravity(3.0f);
+    rigidBody->setGravity(400.0f);
 
     animation = new SpriteAnimation();
     animation->setProperties(textureID, 1, 6, 100);
@@ -41,7 +43,10 @@ void Warrior::clean() {
 }
 
 void Warrior::update(float dt) {
-
+    if (isGrounded && !isSpawned){
+        isSpawned = true;
+        rigidBody->setGravity(GRAVITY);
+    }
     isRunning = false;
     isCrouching = false;
     rigidBody->unSetForce();

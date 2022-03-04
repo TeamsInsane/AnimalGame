@@ -29,6 +29,7 @@ private:
     bool isRunning;
     bool isAttacking;
     bool isCrouching;
+    bool isSpawned;
 
     float jumpTime;
     float jumpForce;

@@ -75,7 +75,18 @@ bool SoundManager::parseSounds(std::string source) {
     return true;
 }
 
-void SoundManager::update() {
-    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_M)) music = false;
-    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_N)) music = true;
+void SoundManager::update(Warrior *player) {
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_M)){
+        music = false;
+        SDL_Log("Music was turned off!");
+    }
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_N)){
+        music = true;
+        SDL_Log("Music was turned on!");
+    }
+
+    if (!getMusicSetting() && Mix_PlayingMusic()) Mix_PauseMusic();
+
+    if (player->getIsJumpingOrFalling() && getMusicSetting()) Mix_ResumeMusic();
+    else Mix_PauseMusic();
 }

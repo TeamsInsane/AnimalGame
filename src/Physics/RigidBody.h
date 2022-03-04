@@ -7,8 +7,8 @@
 
 #include "Vector2D.h"
 
-#define UNI_MASS 1.0f;
-#define GRAVITY 9.8f;
+#define UNI_MASS 1.0f
+#define GRAVITY 3.0f
 #define UPWARD -1
 #define DOWNWARD 1
 
