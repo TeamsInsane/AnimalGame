@@ -25,4 +25,6 @@
     <texture id="boss_attack1_6" source="../assets/boss/attack1_6.png"/>
     <texture id="boss_attack1_7" source="../assets/boss/attack1_7.png"/>
     <texture id="boss_attack1_8" source="../assets/boss/attack1_8.png"/>
+
+    <texture id="animal_idle" source="../assets/animals/idle.png"/>
 </textures>

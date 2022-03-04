@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include <iostream>
 #include "SDL.h"
+#include <SDL_ttf.h>
 #include "../Graphics/TextureManager.h"
 #include <SDL_image.h>
 #include "../Characters/Warrior.h"
@@ -13,8 +14,10 @@
 #include "../Maps/MapParser.h"
 #include "../Factory/ObjectFactory.h"
 #include "../Sound/SoundManager.h"
+#include "../ScreenText/TextDisplays.h"
 
 Engine* Engine::instance = nullptr;
+Warrior *player = nullptr;
 
 Engine *Engine::getInstance() {
     if (instance == nullptr) instance = new Engine;
@@ -22,6 +25,11 @@ Engine *Engine::getInstance() {
 }
 
 bool Engine::init(){
+    if (TTF_Init() == -1){
+        SDL_Log("Could not initialize SDL2 ttf, error: %s", TTF_GetError());
+        return false;
+    }
+
     if (SDL_Init(SDL_INIT_VIDEO)!=0 && IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG)!= 0){
         SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
         return false;
@@ -55,6 +63,8 @@ bool Engine::init(){
 
     TileLayer *collisionLayer = (TileLayer*) levelMap->getMapLayers().back();
 
+    parallaxBg.push_back(new ImgLayer("bg", 0, 0, 1920, 1080, 0.2, 1, 1));
+
     int tileSize = collisionLayer->getTileSize();
     int width = collisionLayer->getWidth()*tileSize;
     int height = collisionLayer->getHeight()*tileSize;
@@ -65,14 +75,20 @@ bool Engine::init(){
 
     TextureManager::getInstance()->parseTextures("../assets/textures.tml");
 
-    Properties *playerProperties = new Properties("player", 100, 200, 32, 32);
-    GameObject *player = ObjectFactory::getInstance()->createObject("PLAYER", playerProperties);
+    player = new Warrior(new Properties("player", 100, 200, 32, 32));
+
+    //Properties *playerProperties = new Properties("player", 100, 200, 32, 32);
+    //GameObject *player = ObjectFactory::getInstance()->createObject("PLAYER", playerProperties);
+
+    Properties *animalProperties = new Properties("animal_idle", 150, 200, 48, 48);
+    GameObject *animal = ObjectFactory::getInstance()->createObject("ANIMAL", animalProperties);
 
     Properties *bossProperties = new Properties("boss_idle", 400, 100, 250, 250);
     GameObject *boss = ObjectFactory::getInstance()->createObject("ENEMY", bossProperties);
 
     gameObject.push_back(player);
     gameObject.push_back(boss);
+    gameObject.push_back(animal);
     Camera::getInstance()->setTarget(player->getOrigin());
 
     SoundManager::getInstance()->playMusic("banger");
@@ -82,8 +98,15 @@ bool Engine::init(){
 }
 void Engine::update(){
     float dt = Timer::getInstance()->getDeltaTime();
-
     for(int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
+    player->update(dt);
+    SoundManager::getInstance()->update();
+    if (!SoundManager::getInstance()->getMusicSetting() && Mix_PlayingMusic()) Mix_PauseMusic();
+    if (player->getIsJumpingOrFalling() && SoundManager::getInstance()->getMusicSetting()){
+        Mix_ResumeMusic();
+    } else {
+        Mix_PauseMusic();
+    }
 
     Camera::getInstance()->update(dt);
 
@@ -98,15 +121,20 @@ void Engine::render(){
     SDL_SetRenderDrawColor(renderer, 124, 210, 254, 255);
     SDL_RenderClear(renderer);
 
-    TextureManager::getInstance()->drawTexture("bg", 0, 0, 1920, 1080, 0.5, 0.5, 0.5);
+    for(int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
+    //TextureManager::getInstance()->drawTexture("bg", 0, 0, 1920, 1080, 0.5, 0.5, 0.5);
     levelMap->render();
 
+    player->draw();
     for(int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
+
+    TextDisplays::getInstance()->draw(player->getOrigin()->x, player->getOrigin()->y);
 
     SDL_RenderPresent(renderer);
 }
 
 void Engine::clean(){
+    player->clean();
     for(int i = 0; i != gameObject.size(); i++) gameObject[i]->clean();
     TextureManager::getInstance()->cleanTexture();
     MapParser::getInstance()->clean();

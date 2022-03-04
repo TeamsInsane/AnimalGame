@@ -34,7 +34,6 @@ void Warrior::draw() {
     animation->draw(transform->x, transform->y, width, height, 1, 1, flip);
 
     collider->drawBox();
-
 }
 
 void Warrior::clean() {

@@ -16,7 +16,7 @@ private:
     std::map<std::string, SDL_Texture*> textureMap;
 public:
     static TextureManager *getInstance();
-
+    SDL_Texture *getTexture(std::string id) {return textureMap[id];}
     bool parseTextures(std::string source);
     bool loadTexture(std::string id, std::string filename);
     void dropTexture(std::string id);

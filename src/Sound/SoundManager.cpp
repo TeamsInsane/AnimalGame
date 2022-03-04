@@ -3,6 +3,9 @@
 //
 
 #include "SoundManager.h"
+#include "../Inputs/Input.h"
+#include "../Characters/Warrior.h"
+#include "../Core/Engine.h"
 
 SoundManager *SoundManager::instance = nullptr;
 
@@ -18,6 +21,7 @@ SoundManager *SoundManager::getInstance() {
 
 void SoundManager::playMusic(std::string id) {
     if(Mix_PlayMusic(musicMap[id], -1) == -1) SDL_Log("Error: %s : %s", Mix_GetError(), id.c_str());
+    Mix_VolumeMusic(3);
 }
 
 void SoundManager::loadMusic(std::string id, std::string source) {
@@ -69,4 +73,9 @@ bool SoundManager::parseSounds(std::string source) {
 
     SDL_Log("Successfully parsed: %s", source.c_str());
     return true;
+}
+
+void SoundManager::update() {
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_M)) music = false;
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_N)) music = true;
 }

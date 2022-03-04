@@ -39,6 +39,11 @@ public:
     virtual void clean();
     virtual void update(float dt);
     void animationState();
+
+    bool getIsJumpingOrFalling(){
+        if (isJumping || isFalling) return true;
+        return false;
+    }
 };
 
 

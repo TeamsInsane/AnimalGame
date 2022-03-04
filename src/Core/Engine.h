@@ -9,6 +9,7 @@
 #include "SDL_image.h"
 #include "../Maps/GameMap.h"
 #include "../Objects/GameObject.h"
+#include "../Maps/ImgLayer.h"
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640
@@ -20,7 +21,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     static Engine* instance;
-
+    std::vector<ImgLayer*> parallaxBg;
     std::vector<GameObject*> gameObject;
 public:
     static Engine* getInstance();
@@ -34,7 +35,8 @@ public:
     void events();
 
     inline bool isRunning() const{return running;}
-    inline SDL_Renderer* getRenderer() const{return renderer;}
+    inline SDL_Renderer *getRenderer() const{return renderer;}
+    inline SDL_Window *getWindow() const{return window;}
 };
 
 

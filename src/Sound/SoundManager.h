@@ -24,6 +24,7 @@ private:
     MusicMap musicMap;
     EffectMap effectMap;
     static SoundManager *instance;
+    bool music = true;
 public:
     void clean();
 
@@ -32,10 +33,11 @@ public:
 
     void playEffect(std::string id);
     void loadEffect(std::string id, std::string source);
-
     bool parseSounds(std::string source);
 
     static SoundManager *getInstance();
+    bool getMusicSetting() const{return music;}
+    void update();
 };
 
 

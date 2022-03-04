@@ -8,7 +8,7 @@
 #include <SDL.h>
 
 const int TARGET_FPS = 60;
-const float TARGET_DELTATIME = 1.5f;
+const float TARGET_DELTATIME = 0.42f;
 
 class Timer {
 private:
