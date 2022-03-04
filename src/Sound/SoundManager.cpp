@@ -90,3 +90,4 @@ void SoundManager::update(Warrior *player) {
     if (player->getIsJumpingOrFalling() && getMusicSetting()) Mix_ResumeMusic();
     else Mix_PauseMusic();
 }
+

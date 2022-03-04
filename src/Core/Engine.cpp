@@ -48,20 +48,24 @@ bool Engine::init(){
         return false;
     }
 
-    Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject);
+    Menu::getInstance()->init(renderer);
 
     running = true;
     return running;
 }
 void Engine::update(){
-    float dt = Timer::getInstance()->getDeltaTime();
-    for(int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
-    player->update(dt);
-    SoundManager::getInstance()->update(player);
+    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->update();
+    else if (Menu::getInstance()->getDisplayGame()){
+        Menu::getInstance()->checkMenu(renderer);
+        float dt = Timer::getInstance()->getDeltaTime();
+        for (int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
+        player->update(dt);
+        SoundManager::getInstance()->update(player);
 
-    Camera::getInstance()->update(dt);
+        Camera::getInstance()->update(dt);
 
-    levelMap->update();
+        levelMap->update();
+    } else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->checkMenu(renderer);
 }
 
 void Engine::events() {
@@ -69,30 +73,35 @@ void Engine::events() {
 }
 
 void Engine::render(){
-    SDL_SetRenderDrawColor(renderer, 124, 210, 254, 255);
     SDL_RenderClear(renderer);
-
-    for(int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
-
-    levelMap->render();
-
-    player->draw();
-    for(int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
-
-    TextDisplays::getInstance()->draw(player->getOrigin()->x, player->getOrigin()->y);
-
+    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections())Menu::getInstance()->draw(renderer);
+    else if (Menu::getInstance()->getDisplayGame()){
+        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject);
+        for (int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
+        levelMap->render();
+        player->draw();
+        for (int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
+        TextDisplays::getInstance()->draw(player->getOrigin()->x, player->getOrigin()->y);
+    }  else if (Menu::getInstance()->getDisplayDirections()){
+        SDL_Surface *surface = IMG_Load("../assets/menu/navodila.png");
+        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_Rect rect = {0, 0, 960, 640};
+        SDL_RenderCopyEx(renderer, texture, nullptr, &rect, 0, nullptr, SDL_FLIP_NONE);
+    }
     SDL_RenderPresent(renderer);
 }
 
 void Engine::clean(){
-    player->clean();
-    for(int i = 0; i != gameObject.size(); i++) gameObject[i]->clean();
-    TextureManager::getInstance()->cleanTexture();
-    MapParser::getInstance()->clean();
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    IMG_Quit();
-    SDL_Quit();
+    if (Menu::getInstance()->getDisplayGame()) {
+        player->clean();
+        for (int i = 0; i != gameObject.size(); i++) gameObject[i]->clean();
+        TextureManager::getInstance()->cleanTexture();
+        MapParser::getInstance()->clean();
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        IMG_Quit();
+        SDL_Quit();
+    }
 }
 
 void Engine::quit(){

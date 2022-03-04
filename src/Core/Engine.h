@@ -5,11 +5,12 @@
 #ifndef ANIMALGAME_ENGINE_H
 #define ANIMALGAME_ENGINE_H
 
-#include "SDL.h"
-#include "SDL_image.h"
+#include <SDL.h>
+#include <SDL_image.h>
 #include "../Maps/GameMap.h"
 #include "../Objects/GameObject.h"
 #include "../Maps/ImgLayer.h"
+#include "../Game/Menu.h"
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640
