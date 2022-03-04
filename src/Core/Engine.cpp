@@ -12,7 +12,6 @@
 #include "../Timers/Timer.h"
 #include "../Maps/MapParser.h"
 #include "../Sound/SoundManager.h"
-#include "../ScreenText/TextDisplays.h"
 #include "../Game/Play.h"
 
 Engine* Engine::instance = nullptr;
@@ -81,13 +80,11 @@ void Engine::render(){
         levelMap->render();
         player->draw();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
-        TextDisplays::getInstance()->draw(player->getOrigin()->x, player->getOrigin()->y);
-    }  else if (Menu::getInstance()->getDisplayDirections()){
-        SDL_Surface *surface = IMG_Load("../assets/menu/navodila.png");
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_Rect rect = {0, 0, 960, 640};
-        SDL_RenderCopyEx(renderer, texture, nullptr, &rect, 0, nullptr, SDL_FLIP_NONE);
-    }
+        std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
+        Text tempText = Text();
+        tempText.init(renderer, 0, 0, (const_cast<char *>(temp.c_str())));
+    }  else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
+
     SDL_RenderPresent(renderer);
 }
 

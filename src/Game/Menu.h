@@ -5,7 +5,7 @@
 #ifndef ANIMALGAME_MENU_H
 #define ANIMALGAME_MENU_H
 
-#include "Text.h"
+#include "../Texts/Text.h"
 #include <SDL.h>
 
 class Menu {
@@ -37,6 +37,8 @@ public:
     void checkMenu(SDL_Renderer *renderer);
 
     bool getDisplayDirections() const;
+
+    void loadDirections(SDL_Renderer *renderer);
 };
 
 

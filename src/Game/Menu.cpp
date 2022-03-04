@@ -120,3 +120,10 @@ void Menu::checkMenu(SDL_Renderer *renderer){
 bool Menu::getDisplayGame() const{return displayGame;}
 
 bool Menu::getDisplayDirections() const {return displayDirections;}
+
+void Menu::loadDirections(SDL_Renderer *renderer) {
+    SDL_Surface *surface = IMG_Load("../assets/menu/navodila.png");
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect rect = {0, 0, 960, 640};
+    SDL_RenderCopyEx(renderer, texture, nullptr, &rect, 0, nullptr, SDL_FLIP_NONE);
+}
