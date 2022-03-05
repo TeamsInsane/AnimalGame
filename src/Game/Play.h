@@ -17,6 +17,9 @@ private:
 public:
     static Play *getInstance();
     void mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject);
+
+    void secondGame(GameMap *&levelMap, std::vector<ImgLayer *> &parallaxBg, Warrior *&player,
+                    std::vector<GameObject *> &gameObject);
 };
 
 

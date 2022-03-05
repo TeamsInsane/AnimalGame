@@ -9,9 +9,6 @@
 #include "../Physics/Vector2D.h"
 #include "../Core/Engine.h"
 
-#define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 640
-
 class Camera {
 private:
     static Camera *instance;

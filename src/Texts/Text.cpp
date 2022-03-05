@@ -10,7 +10,7 @@ void Text::init(SDL_Renderer *renderer, int x, int y, char *text) {
 
     this->renderer = renderer;
 
-    font = TTF_OpenFont("../assets/fonts/lato.ttf", 40);
+    font = TTF_OpenFont("../assets/fonts/OpenSans.ttf", 40);
     if (font == nullptr) {
         SDL_Log("Error: font not found!");
         exit(EXIT_FAILURE);
@@ -29,14 +29,14 @@ void Text::init(SDL_Renderer *renderer, int x, int y, char *text) {
 void Text::initCenter(SDL_Renderer *renderer, int y, int size, char *text) {
     this->renderer = renderer;
 
-    font = TTF_OpenFont("../assets/fonts/lato.ttf", size);
-    color = {255, 255, 255, 0};
+    font = TTF_OpenFont("../assets/fonts/Planes_ValMore.ttf", size);
+    color = {255, 0, 102, 0};
 
     SDL_Surface *surfaceMessage = TTF_RenderText_Solid(font, text, color);
 
     message = SDL_CreateTextureFromSurface(this->renderer, surfaceMessage);
 
-    messageRect = {(SCREEN_WIDTH - surfaceMessage->w) / 2, y, surfaceMessage->w, surfaceMessage->h};
+    messageRect = {(SCREEN_WIDTH - surfaceMessage->w) / 2, y, surfaceMessage->w + 10, surfaceMessage->h + 10};
 
 
     draw();

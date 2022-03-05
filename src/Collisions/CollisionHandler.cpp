@@ -28,6 +28,9 @@ bool CollisionHandler::checkCollision(SDL_Rect a, SDL_Rect b) {
 
 bool CollisionHandler::mapCollision(SDL_Rect a) {
 
+    if (a.x < 0 || a.x + a.w >= mapWidth * mapTileSize || a.y < 0 || a.y + a.h >= mapHeight * mapTileSize)
+        return true;
+
     int leftTile = a.x/mapTileSize;
     int rightTile = (a.x + a.w)/mapTileSize;
 

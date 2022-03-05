@@ -9,6 +9,7 @@
 #include "../Cameras/Camera.h"
 #include "../Collisions/CollisionHandler.h"
 #include "../Factory/ObjectFactory.h"
+#include "../Game/Play.h"
 
 #define FORWARD 1
 #define BACKWARD -1

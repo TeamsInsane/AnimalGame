@@ -11,7 +11,7 @@
 Play *Play::instance = nullptr;
 
 void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject){
-    if (!MapParser::getInstance()->load("../assets/maps/map.tmx")){
+    if (!MapParser::getInstance()->load("../assets/maps/map2.tmx")){
         SDL_Log("failed to load map: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
@@ -25,7 +25,7 @@ void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warr
 
     TileLayer *collisionLayer = (TileLayer*) levelMap->getMapLayers().back();
 
-    parallaxBg.push_back(new ImgLayer("bg", 0, 0, 1920, 1080, 0.2, 1, 1));
+    parallaxBg.push_back(new ImgLayer("bg", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0.2, 2, 2));
 
     int tileSize = collisionLayer->getTileSize();
     int width = collisionLayer->getWidth()*tileSize;

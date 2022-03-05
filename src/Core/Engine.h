@@ -12,8 +12,8 @@
 #include "../Maps/ImgLayer.h"
 #include "../Game/Menu.h"
 
-#define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 640
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1030
 
 class Engine {
 private:
@@ -38,6 +38,8 @@ public:
     inline bool isRunning() const{return running;}
     inline SDL_Renderer *getRenderer() const{return renderer;}
     inline SDL_Window *getWindow() const{return window;}
+
+    void cleanForNewMap();
 };
 
 

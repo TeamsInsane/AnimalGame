@@ -7,7 +7,8 @@
     <texture id="player_crouch" source="../assets/player/player_crouch.png"/>
     <texture id="player_attack" source="../assets/player/player_attack.png"/>
 
-    <texture id="bg" source="../assets/images/Background.png"/>
+    <texture id="bg" source="../assets/images/Background.jpg"/>
+    <texture id="menuBG" source="../assets/images/menuBackground.png"/>
     <texture id="navodila" source="../assets/menu/navodila.png"/>
 
     <texture id="boss_idle1" source="../assets/boss/idle1.png"/>
