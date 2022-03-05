@@ -45,6 +45,8 @@ public:
         if (isJumping || isFalling) return true;
         return false;
     }
+
+    SDL_Rect getBox();
 };
 
 

@@ -51,3 +51,7 @@ void Animals::update(float dt) {
 
     animation->update(dt);
 }
+
+SDL_Rect Animals::getBox(){
+    return collider->getBox();
+}

@@ -6,10 +6,7 @@
 #include "../Graphics/TextureManager.h"
 #include "SDL.h"
 #include "../Inputs/Input.h"
-#include "../Cameras/Camera.h"
-#include "../Collisions/CollisionHandler.h"
 #include "../Factory/ObjectFactory.h"
-#include "../Game/Play.h"
 
 #define FORWARD 1
 #define BACKWARD -1
@@ -147,4 +144,8 @@ void Warrior::animationState() {
 
     //Attacking
     if (isAttacking) animation->setProperties("player_attack", 1, 6, 100);
+}
+
+SDL_Rect Warrior::getBox(){
+    return collider->getBox();
 }

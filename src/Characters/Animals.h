@@ -23,6 +23,8 @@ public:
     virtual void draw();
     virtual void clean();
     virtual void update(float dt);
+
+    SDL_Rect getBox();
 };
 
 

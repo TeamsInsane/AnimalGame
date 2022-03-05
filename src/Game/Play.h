@@ -10,16 +10,16 @@
 #include "../Maps/GameMap.h"
 #include "../Core/Engine.h"
 #include "../Characters/Warrior.h"
+#include "../Characters/Animals.h"
 
 class Play {
 private:
     static Play* instance;
 public:
     static Play *getInstance();
-    void mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject);
+    void mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject, Animals *&animal);
 
-    void secondGame(GameMap *&levelMap, std::vector<ImgLayer *> &parallaxBg, Warrior *&player,
-                    std::vector<GameObject *> &gameObject);
+    Animals *renderAnimal();
 };
 
 

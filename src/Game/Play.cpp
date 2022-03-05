@@ -10,7 +10,7 @@
 
 Play *Play::instance = nullptr;
 
-void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject){
+void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject, Animals *&animal){
     if (!MapParser::getInstance()->load("../assets/maps/map2.tmx")){
         SDL_Log("failed to load map: %s", SDL_GetError());
         exit(EXIT_FAILURE);
@@ -39,18 +39,12 @@ void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warr
 
     player = new Warrior(new Properties("player", 100, 200, 32, 32));
 
-    //Properties *playerProperties = new Properties("player", 100, 200, 32, 32);
-    //GameObject *player = ObjectFactory::getInstance()->createObject("PLAYER", playerProperties);
-
-    Properties *animalProperties = new Properties("animal_idle", 150, 200, 48, 48);
-    GameObject *animal = ObjectFactory::getInstance()->createObject("ANIMAL", animalProperties);
+    animal = renderAnimal();
 
     Properties *bossProperties = new Properties("boss_idle", 400, 100, 250, 250);
     GameObject *boss = ObjectFactory::getInstance()->createObject("ENEMY", bossProperties);
 
-    gameObject.push_back(player);
     gameObject.push_back(boss);
-    gameObject.push_back(animal);
     Camera::getInstance()->setTarget(player->getOrigin());
 
     SoundManager::getInstance()->playMusic("banger");
@@ -59,4 +53,9 @@ void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warr
 Play *Play::getInstance() {
     if (instance == nullptr) instance = new Play();
     return instance;
+}
+
+Animals *Play::renderAnimal(){
+    Animals *animal = new Animals(new Properties("animal_idle", 150, 1800, 48, 48));
+    return animal;
 }

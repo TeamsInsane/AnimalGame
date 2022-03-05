@@ -16,6 +16,7 @@
 
 Engine* Engine::instance = nullptr;
 Warrior *player = nullptr;
+Animals *animal = nullptr;
 
 Engine *Engine::getInstance() {
     if (instance == nullptr) instance = new Engine;
@@ -49,6 +50,8 @@ bool Engine::init(){
 
     Menu::getInstance()->init(renderer);
 
+    savedAnimals = 0;
+
     running = true;
     return running;
 }
@@ -59,6 +62,7 @@ void Engine::update(){
         float dt = Timer::getInstance()->getDeltaTime();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
         player->update(dt);
+        animal->update(dt);
         SoundManager::getInstance()->update(player);
 
         Camera::getInstance()->update(dt);
@@ -75,13 +79,21 @@ void Engine::render(){
     SDL_RenderClear(renderer);
     if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections())Menu::getInstance()->draw(renderer);
     else if (Menu::getInstance()->getDisplayGame()){
-        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject);
+        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject, animal);
         for (int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
         levelMap->render();
+        SDL_Rect playerRect = player->getBox(), animalRect = animal->getBox();
+        if (SDL_HasIntersection(&playerRect, &animalRect)){
+            savedAnimals++;
+            animal = Play::getInstance()->renderAnimal();
+        }
         player->draw();
+        animal->draw();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
         std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
         Text tempText = Text();
+        tempText.init(renderer, 0, 30, (const_cast<char *>(temp.c_str())));
+        temp = "Saved animals count: " + std::to_string(savedAnimals);
         tempText.init(renderer, 0, 0, (const_cast<char *>(temp.c_str())));
     }  else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
 

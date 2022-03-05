@@ -24,6 +24,7 @@ private:
     static Engine* instance;
     std::vector<ImgLayer*> parallaxBg;
     std::vector<GameObject*> gameObject;
+    int savedAnimals;
 public:
     static Engine* getInstance();
     GameMap *getGameMap() {return levelMap;}
@@ -35,6 +36,7 @@ public:
     void render();
     void events();
 
+    int getSavedAnimalsCount() {return savedAnimals;}
     inline bool isRunning() const{return running;}
     inline SDL_Renderer *getRenderer() const{return renderer;}
     inline SDL_Window *getWindow() const{return window;}
