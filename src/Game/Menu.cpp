@@ -98,10 +98,7 @@ void Menu::update() {
         displayDirections = true;
     }
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && position == 2) {
-        SDL_DestroyRenderer(Engine::getInstance()->getRenderer());
-        SDL_DestroyWindow(Engine::getInstance()->getWindow());
-        IMG_Quit();
-        SDL_Quit();
+        Engine::getInstance()->clean();
         Engine::getInstance()->quit();
     }
 
