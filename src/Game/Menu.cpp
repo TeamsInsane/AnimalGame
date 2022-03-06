@@ -98,7 +98,6 @@ void Menu::update() {
         displayDirections = true;
     }
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && position == 2) {
-        Engine::getInstance()->clean();
         Engine::getInstance()->quit();
     }
 

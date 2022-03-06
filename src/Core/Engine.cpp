@@ -101,8 +101,8 @@ void Engine::render(){
 }
 
 void Engine::clean(){
-    if (Menu::getInstance()->getDisplayGame()) {
         player->clean();
+        animal->clean();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->clean();
         TextureManager::getInstance()->cleanTexture();
         MapParser::getInstance()->clean();
@@ -110,7 +110,6 @@ void Engine::clean(){
         SDL_DestroyWindow(window);
         IMG_Quit();
         SDL_Quit();
-    }
 }
 
 void Engine::quit(){
