@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 4. 03. 2022.
+// Created by TeamsInsane on 4. 03. 2022.
 //
 
 #include "Play.h"
@@ -37,11 +37,11 @@ void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warr
 
     TextureManager::getInstance()->parseTextures("../assets/textures.tml");
 
-    player = new Warrior(new Properties("player", 100, 200, 32, 32));
+    player = new Warrior(new Properties("player", 100, 1800, 32, 32));
 
     animal = renderAnimal();
 
-    Properties *bossProperties = new Properties("boss_idle", 400, 100, 250, 250);
+    Properties *bossProperties = new Properties("boss_idle", 400, 1700, 250, 250);
     GameObject *boss = ObjectFactory::getInstance()->createObject("ENEMY", bossProperties);
 
     gameObject.push_back(boss);

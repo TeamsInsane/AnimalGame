@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 23. 02. 2022.
+// Created by TeamsInsane on 23. 02. 2022.
 //
 
 #ifndef ANIMALGAME_CAMERA_H

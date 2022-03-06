@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 24. 02. 2022.
+// Created by TeamsInsane on 24. 02. 2022.
 //
 
 #include "Enemy.h"
@@ -25,7 +25,7 @@ Enemy::Enemy(Properties *properties) : Character(properties) {
 void Enemy::draw() {
     animation->drawFrame(transform->x, transform->y, 1, 1, flip);
 
-    collider->drawBox();
+    //collider->drawBox();
 }
 
 void Enemy::clean() {

@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 24. 02. 2022.
+// Created by TeamsInsane on 24. 02. 2022.
 //
 
 #ifndef ANIMALGAME_OBJECTFACTORY_H

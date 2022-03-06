@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 3. 03. 2022.
+// Created by TeamsInsane on 3. 03. 2022.
 //
 
 #include "Animals.h"
@@ -23,7 +23,7 @@ Animals::Animals(Properties *properties) : Character(properties) {
 void Animals::draw() {
     animation->draw(transform->x, transform->y, width,height, 1, 1, flip);
 
-    collider->drawBox();
+    //collider->drawBox();
 }
 
 void Animals::clean() {

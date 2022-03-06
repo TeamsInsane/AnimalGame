@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 27. 02. 2022.
+// Created by TeamsInsane on 27. 02. 2022.
 //
 
 #include "SoundManager.h"
@@ -21,7 +21,7 @@ SoundManager *SoundManager::getInstance() {
 
 void SoundManager::playMusic(std::string id) {
     if(Mix_PlayMusic(musicMap[id], -1) == -1) SDL_Log("Error: %s : %s", Mix_GetError(), id.c_str());
-    Mix_VolumeMusic(3);
+    Mix_VolumeMusic(2);
 }
 
 void SoundManager::loadMusic(std::string id, std::string source) {

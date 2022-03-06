@@ -33,7 +33,7 @@ Warrior::Warrior(Properties* properties): Character(properties) {
 void Warrior::draw() {
     animation->draw(transform->x, transform->y, width, height, 1, 1, flip);
 
-    collider->drawBox();
+    //collider->drawBox();
 }
 
 void Warrior::clean() {

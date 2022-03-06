@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 4. 03. 2022.
+// Created by TeamsInsane on 4. 03. 2022.
 //
 
 #ifndef ANIMALGAME_MENU_H
@@ -17,7 +17,7 @@ private:
     bool moveArrow;
     bool displayGame;
     bool displayDirections;
-    int retard;
+    int delayCount;
 
     Text title, options[3];
     int position;

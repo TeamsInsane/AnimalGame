@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 4. 03. 2022.
+// Created by TeamsInsane on 4. 03. 2022.
 //
 
 #include "Menu.h"
@@ -76,9 +76,9 @@ Menu *Menu::getInstance() {
 }
 
 void Menu::update() {
-    retard++;
-    if (retard == 49){
-        retard = 0;
+    delayCount++;
+    if (delayCount == 49){
+        delayCount = 0;
         moveArrow = true;
     }
     if (!moveArrow) return;

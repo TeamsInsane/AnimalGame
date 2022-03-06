@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 22. 02. 2022.
+// Created by TeamsInsane on 22. 02. 2022.
 //
 
 #include "Timer.h"

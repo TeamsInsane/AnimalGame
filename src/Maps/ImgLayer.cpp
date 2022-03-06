@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 3. 03. 2022.
+// Created by TeamsInsane on 3. 03. 2022.
 //
 
 #include "ImgLayer.h"

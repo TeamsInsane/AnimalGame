@@ -13,7 +13,7 @@
 
 #define JUMP_TIME 15.0f
 #define JUMP_FORCE 10.0
-#define RUN_FORCE 4.0f
+#define RUN_FORCE 10.0f
 #define ATTACK_TIME 20.0f
 
 class Warrior: public Character{

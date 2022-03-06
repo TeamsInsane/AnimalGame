@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 27. 02. 2022.
+// Created by TeamsInsane on 27. 02. 2022.
 //
 
 #ifndef ANIMALGAME_SOUNDMANAGER_H
