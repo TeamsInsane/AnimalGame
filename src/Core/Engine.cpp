@@ -90,11 +90,13 @@ void Engine::render(){
         player->draw();
         animal->draw();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
+
+        Text tempText;
         std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
-        Text tempText = Text();
-        tempText.init(renderer, 0, 30, (const_cast<char *>(temp.c_str())));
+        tempText.init(renderer, 0, 30, temp.c_str());
         temp = "Saved animals count: " + std::to_string(savedAnimals);
-        tempText.init(renderer, 0, 0, (const_cast<char *>(temp.c_str())));
+        tempText.init(renderer, 0, 0, temp.c_str());
+
     }  else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
 
     SDL_RenderPresent(renderer);

@@ -6,7 +6,7 @@
 
 #include "../Core/Engine.h"
 
-void Text::init(SDL_Renderer *renderer, int x, int y, char *text) {
+void Text::init(SDL_Renderer *renderer, int x, int y, const char *text) {
 
     this->renderer = renderer;
 
@@ -23,7 +23,12 @@ void Text::init(SDL_Renderer *renderer, int x, int y, char *text) {
     message = SDL_CreateTextureFromSurface(this->renderer, surfaceMessage);
     messageRect = {x, y, surfaceMessage->w - 150, surfaceMessage->h - 20};
 
-    draw();
+    SDL_FreeSurface(surfaceMessage);
+    TTF_CloseFont(font);
+
+    SDL_RenderCopyEx(renderer, message, nullptr, &messageRect, 0, nullptr, SDL_FLIP_NONE);
+
+    SDL_DestroyTexture(message);
 }
 
 void Text::initCenter(SDL_Renderer *renderer, int y, int size, char *text) {
@@ -38,8 +43,9 @@ void Text::initCenter(SDL_Renderer *renderer, int y, int size, char *text) {
 
     messageRect = {(SCREEN_WIDTH - surfaceMessage->w) / 2, y, surfaceMessage->w + 10, surfaceMessage->h + 10};
 
+    SDL_FreeSurface(surfaceMessage);
+    TTF_CloseFont(font);
 
-    draw();
 }
 
 void Text::draw() {

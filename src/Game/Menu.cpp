@@ -98,6 +98,7 @@ void Menu::update() {
         displayDirections = true;
     }
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && position == 2) {
+        Engine::getInstance()->clean();
         Engine::getInstance()->quit();
     }
 
@@ -123,4 +124,6 @@ void Menu::loadDirections(SDL_Renderer *renderer) {
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_Rect rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_RenderCopyEx(renderer, texture, nullptr, &rect, 0, nullptr, SDL_FLIP_NONE);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
 }
