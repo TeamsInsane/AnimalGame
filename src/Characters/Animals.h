@@ -25,6 +25,9 @@ public:
     virtual void update(float dt);
 
     SDL_Rect getBox();
+
+    void setY(float y);
+    void setX(float x);
 };
 
 

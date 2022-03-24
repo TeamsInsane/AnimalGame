@@ -56,6 +56,6 @@ Play *Play::getInstance() {
 }
 
 Animals *Play::renderAnimal(){
-    Animals *animal = new Animals(new Properties("animal_idle", 150, 1800, 48, 48));
+    Animals *animal = new Animals(new Properties("animal_idle", 1910, 2000, 48, 48));
     return animal;
 }

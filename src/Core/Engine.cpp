@@ -84,8 +84,12 @@ void Engine::render(){
         levelMap->render();
         SDL_Rect playerRect = player->getBox(), animalRect = animal->getBox();
         if (SDL_HasIntersection(&playerRect, &animalRect)){
-            savedAnimals++;
-            animal = Play::getInstance()->renderAnimal();
+            animal->setX(player->getOrigin()->x);
+            animal->setY(player->getOrigin()->y - 30);
+            if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200){
+                savedAnimals++;
+                animal = Play::getInstance()->renderAnimal();
+            }
         }
         player->draw();
         animal->draw();

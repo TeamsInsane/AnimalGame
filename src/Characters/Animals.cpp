@@ -23,7 +23,7 @@ Animals::Animals(Properties *properties) : Character(properties) {
 void Animals::draw() {
     animation->draw(transform->x, transform->y, width,height, 1, 1, flip);
 
-    //collider->drawBox();
+    collider->drawBox();
 }
 
 void Animals::clean() {
@@ -54,4 +54,12 @@ void Animals::update(float dt) {
 
 SDL_Rect Animals::getBox(){
     return collider->getBox();
+}
+
+void Animals::setX(float x){
+    transform->x = x;
+}
+
+void Animals::setY(float y){
+    transform->y = y;
 }
