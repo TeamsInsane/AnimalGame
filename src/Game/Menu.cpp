@@ -34,6 +34,8 @@ void Menu::init(SDL_Renderer *&renderer) {
 
     surface = IMG_Load("../assets/menu/arrow.png");
     arrow = SDL_CreateTextureFromSurface(renderer, surface);
+
+    SDL_FreeSurface(surface);
 }
 
 void Menu::draw(SDL_Renderer *&renderer) {

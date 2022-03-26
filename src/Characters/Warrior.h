@@ -31,6 +31,8 @@ private:
     bool isCrouching;
     bool isSpawned;
 
+    int health;
+
     float jumpTime;
     float jumpForce;
     float attackTime;
@@ -47,6 +49,10 @@ public:
     }
 
     SDL_Rect getBox();
+
+    int getHealth() const;
+
+    void changeHealth(int num);
 };
 
 

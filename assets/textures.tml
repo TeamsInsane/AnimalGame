@@ -29,5 +29,16 @@
     <texture id="boss_attack1_7" source="../assets/boss/attack1_7.png"/>
     <texture id="boss_attack1_8" source="../assets/boss/attack1_8.png"/>
 
-    <texture id="animal_idle" source="../assets/animals/idle.png"/>
+    <texture id="bird" source="../assets/animals/bird.png"/>
+    <texture id="cat1" source="../assets/animals/cat1.png"/>
+    <texture id="cat2" source="../assets/animals/cat2.png"/>
+    <texture id="chicken" source="../assets/animals/chicken.png"/>
+    <texture id="dog1" source="../assets/animals/dog1.png"/>
+    <texture id="dog2" source="../assets/animals/dog2.png"/>
+    <texture id="hyena" source="../assets/animals/hyena.png"/>
+    <texture id="rat" source="../assets/animals/rat.png"/>
+    <texture id="scorpion" source="../assets/animals/scorpion.png"/>
+    <texture id="snake" source="../assets/animals/snake.png"/>
+    <texture id="frog" source="../assets/animals/frog.png"/>
+
 </textures>

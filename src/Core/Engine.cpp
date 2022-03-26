@@ -11,10 +11,12 @@
 #include "../Game/Play.h"
 #include "../Graphics/TextureManager.h"
 #include "../Maps/MapParser.h"
+#include "../Characters/Enemy.h"
 
 Engine* Engine::instance = nullptr;
 
 std::vector<Animals*> animals;
+std::vector<Enemy*> enemies;
 Warrior *player;
 
 Engine *Engine::getInstance() {
@@ -49,9 +51,11 @@ bool Engine::init(){
 
     Menu::getInstance()->init(renderer);
 
-    savedAnimals = 0;
+    heartTexture = SDL_CreateTextureFromSurface(renderer, IMG_Load("../assets/menu/hearts.png"));
 
-    carrying = false;
+    savedAnimals = 0;
+    index = -1;
+    delay = 0;
     running = true;
     return running;
 }
@@ -60,7 +64,7 @@ void Engine::update(){
     else if (Menu::getInstance()->getDisplayGame()){
         Menu::getInstance()->checkMenu(renderer);
         float dt = Timer::getInstance()->getDeltaTime();
-        for (int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
+        for (int i = 0; i != enemies.size(); i++) enemies[i]->update(dt);
         player->update(dt);\
         for(int i = 0; i < animals.size(); i++) animals[i]->update(dt);
         SoundManager::getInstance()->update(player);
@@ -79,25 +83,49 @@ void Engine::render(){
     SDL_RenderClear(renderer);
     if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections())Menu::getInstance()->draw(renderer);
     else if (Menu::getInstance()->getDisplayGame()){
-        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject, animals);
+        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, enemies, animals);
         for (int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
         levelMap->render();
-        for(int i = 0; i < animals.size(); i++) {
-            SDL_Rect playerRect = player->getBox(), animalRect = animals[i]->getBox();
+        SDL_Rect playerRect = player->getBox();
+        for(int i = 0; i < animals.size() && index == -1; i++) {
+            SDL_Rect animalRect = animals[i]->getBox();
+            if (SDL_HasIntersection(&playerRect, &animalRect)) index = i;
+        }
+
+        if (index != -1){
+            SDL_Rect animalRect = animals[index]->getBox();
             if (SDL_HasIntersection(&playerRect, &animalRect)) {
-                animals[i]->setX(player->getOrigin()->x);
-                animals[i]->setY(player->getOrigin()->y - 30);
+                animals[index]->setX(player->getOrigin()->x);
+                animals[index]->setY(player->getOrigin()->y - 30);
                 if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200) {
                     savedAnimals++;
-                    animals.erase(animals.begin() + i);
+                    animals.erase(animals.begin() + index);
                     animals.push_back(Play::getInstance()->renderAnimal());
                     SDL_Log("Animal erased and spawned a new one!");
+                    index = -1;
                 }
             }
         }
+
+        for(int i = 0; i < enemies.size(); i++){
+            SDL_Rect enemiesRect = enemies[i]->getBox();
+            delay++;
+            if (SDL_HasIntersection(&playerRect, &enemiesRect) && delay > 100){
+                delay = 0;
+                player->changeHealth(player->getHealth() - 1);
+            }
+        }
+        int y = 25;
+        for(int i = 0; i < player->getHealth(); i++){
+            SDL_Rect heartRect;
+            heartRect = {SCREEN_WIDTH - y, 0, 25, 25};
+            y+=25;
+            SDL_RenderCopyEx(renderer, heartTexture, nullptr, &heartRect, 0, nullptr, SDL_FLIP_NONE);
+        }
+
         player->draw();
         for(int i = 0; i < animals.size(); i++) animals[i]->draw();
-        for (int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
+        for (int i = 0; i != enemies.size(); i++) enemies[i]->draw();
 
         Text tempText;
         std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
@@ -113,7 +141,7 @@ void Engine::render(){
 void Engine::clean(){
         player->clean();
         for(int i = 0; i < animals.size(); i++) animals[i]->clean();
-        for (int i = 0; i != gameObject.size(); i++) gameObject[i]->clean();
+        for (int i = 0; i != enemies.size(); i++) enemies[i]->clean();
         TextureManager::getInstance()->cleanTexture();
         MapParser::getInstance()->clean();
         SDL_DestroyRenderer(renderer);

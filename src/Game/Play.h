@@ -11,13 +11,15 @@
 #include "../Core/Engine.h"
 #include "../Characters/Warrior.h"
 #include "../Characters/Animals.h"
+#include "../Characters/Enemy.h"
 
 class Play {
 private:
+    int x = 1000; //1910
     static Play* instance;
 public:
     static Play *getInstance();
-    void mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject, Animals *&animal);
+    void mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<Enemy*> &enemies, std::vector<Animals*> &animals);
 
     Animals *renderAnimal();
 };

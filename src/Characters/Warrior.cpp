@@ -26,6 +26,8 @@ Warrior::Warrior(Properties* properties): Character(properties) {
     rigidBody = new RigidBody();
     rigidBody->setGravity(400.0f);
 
+    health = 3;
+
     animation = new SpriteAnimation();
     animation->setProperties(textureID, 1, 6, 100);
 }
@@ -149,3 +151,7 @@ void Warrior::animationState() {
 SDL_Rect Warrior::getBox(){
     return collider->getBox();
 }
+
+int Warrior::getHealth() const{return health;}
+
+void Warrior::changeHealth(int num) {health = num;}

@@ -53,3 +53,7 @@ void Enemy::update(float dt) {
         animation->setCurrentSeq("wizard_idle");
     }
 }
+
+SDL_Rect Enemy::getBox(){
+    return collider->getBox();
+}

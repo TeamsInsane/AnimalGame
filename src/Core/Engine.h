@@ -21,10 +21,12 @@ private:
     GameMap* levelMap;
     SDL_Window* window;
     SDL_Renderer* renderer;
+    SDL_Texture *heartTexture;
     static Engine* instance;
     std::vector<ImgLayer*> parallaxBg;
-    std::vector<GameObject*> gameObject;
     int savedAnimals;
+    int index;
+    int delay;
 public:
     static Engine* getInstance();
     GameMap *getGameMap() {return levelMap;}
