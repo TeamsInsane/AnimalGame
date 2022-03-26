@@ -10,7 +10,7 @@
 
 Play *Play::instance = nullptr;
 
-void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject, Animals *&animal){
+void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<GameObject*> &gameObject, std::vector<Animals*> &animals){
     if (!MapParser::getInstance()->load("../assets/maps/map2.tmx")){
         SDL_Log("failed to load map: %s", SDL_GetError());
         exit(EXIT_FAILURE);
@@ -39,7 +39,7 @@ void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warr
 
     player = new Warrior(new Properties("player", 100, 1800, 32, 32));
 
-    animal = renderAnimal();
+    for(int i = 0; i < 9; i++) animals.push_back(renderAnimal());
 
     Properties *bossProperties = new Properties("boss_idle", 400, 1700, 250, 250);
     GameObject *boss = ObjectFactory::getInstance()->createObject("ENEMY", bossProperties);
@@ -56,6 +56,31 @@ Play *Play::getInstance() {
 }
 
 Animals *Play::renderAnimal(){
-    Animals *animal = new Animals(new Properties("animal_idle", 1910, 2000, 48, 48));
-    return animal;
+    x +=50;
+    switch (rand()%(11-0)+0) {
+        case 0:
+            return new Animals(new Properties("bird", x, 2000, 32, 32));
+        case 1:
+            return new Animals(new Properties("cat1", x, 2000, 48, 48));
+        case 2:
+            return new Animals(new Properties("cat2", x, 2000, 48, 48));
+        case 3:
+            return new Animals(new Properties("chicken", x, 2000, 32, 32));
+        case 4:
+            return new Animals(new Properties("dog1", x, 2000, 48, 48));
+        case 5:
+            return new Animals(new Properties("dog2", x, 2000, 48, 48));
+        case 6:
+            return new Animals(new Properties("hyena", x, 2000, 48, 48));
+        case 7:
+            return new Animals(new Properties("rat", x, 2000, 32, 32));
+        case 8:
+            return  new Animals(new Properties("scorpion", x, 2000, 48, 48));
+        case 9:
+            return new Animals(new Properties("snake", x, 2000, 48, 48));
+        case 10:
+            return new Animals(new Properties("frog", x, 2000, 32, 32));
+        default:
+            exit(EXIT_FAILURE);
+    }
 }

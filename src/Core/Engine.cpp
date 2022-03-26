@@ -3,20 +3,19 @@
 //
 
 #include "Engine.h"
-#include <iostream>
-#include "SDL.h"
-#include <SDL_ttf.h>
-#include "../Graphics/TextureManager.h"
-#include <SDL_image.h>
-#include "../Inputs/Input.h"
+#include "../Characters/Warrior.h"
+#include "../Characters/Animals.h"
 #include "../Timers/Timer.h"
-#include "../Maps/MapParser.h"
 #include "../Sound/SoundManager.h"
+#include "../Inputs/Input.h"
 #include "../Game/Play.h"
+#include "../Graphics/TextureManager.h"
+#include "../Maps/MapParser.h"
 
 Engine* Engine::instance = nullptr;
-Warrior *player = nullptr;
-Animals *animal = nullptr;
+
+std::vector<Animals*> animals;
+Warrior *player;
 
 Engine *Engine::getInstance() {
     if (instance == nullptr) instance = new Engine;
@@ -52,6 +51,7 @@ bool Engine::init(){
 
     savedAnimals = 0;
 
+    carrying = false;
     running = true;
     return running;
 }
@@ -61,8 +61,8 @@ void Engine::update(){
         Menu::getInstance()->checkMenu(renderer);
         float dt = Timer::getInstance()->getDeltaTime();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->update(dt);
-        player->update(dt);
-        animal->update(dt);
+        player->update(dt);\
+        for(int i = 0; i < animals.size(); i++) animals[i]->update(dt);
         SoundManager::getInstance()->update(player);
 
         Camera::getInstance()->update(dt);
@@ -79,20 +79,24 @@ void Engine::render(){
     SDL_RenderClear(renderer);
     if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections())Menu::getInstance()->draw(renderer);
     else if (Menu::getInstance()->getDisplayGame()){
-        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject, animal);
+        if (player == nullptr) Play::getInstance()->mainGame(levelMap, parallaxBg, player, gameObject, animals);
         for (int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
         levelMap->render();
-        SDL_Rect playerRect = player->getBox(), animalRect = animal->getBox();
-        if (SDL_HasIntersection(&playerRect, &animalRect)){
-            animal->setX(player->getOrigin()->x);
-            animal->setY(player->getOrigin()->y - 30);
-            if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200){
-                savedAnimals++;
-                animal = Play::getInstance()->renderAnimal();
+        for(int i = 0; i < animals.size(); i++) {
+            SDL_Rect playerRect = player->getBox(), animalRect = animals[i]->getBox();
+            if (SDL_HasIntersection(&playerRect, &animalRect)) {
+                animals[i]->setX(player->getOrigin()->x);
+                animals[i]->setY(player->getOrigin()->y - 30);
+                if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200) {
+                    savedAnimals++;
+                    animals.erase(animals.begin() + i);
+                    animals.push_back(Play::getInstance()->renderAnimal());
+                    SDL_Log("Animal erased and spawned a new one!");
+                }
             }
         }
         player->draw();
-        animal->draw();
+        for(int i = 0; i < animals.size(); i++) animals[i]->draw();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->draw();
 
         Text tempText;
@@ -108,7 +112,7 @@ void Engine::render(){
 
 void Engine::clean(){
         player->clean();
-        animal->clean();
+        for(int i = 0; i < animals.size(); i++) animals[i]->clean();
         for (int i = 0; i != gameObject.size(); i++) gameObject[i]->clean();
         TextureManager::getInstance()->cleanTexture();
         MapParser::getInstance()->clean();
