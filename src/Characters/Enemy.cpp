@@ -5,9 +5,6 @@
 #include "Enemy.h"
 #include "../Collisions/CollisionHandler.h"
 #include "../Cameras/Camera.h"
-#include "../Factory/ObjectFactory.h"
-
-static Registrar<Enemy> registrar("ENEMY");
 
 Enemy::Enemy(Properties *properties) : Character(properties) {
 

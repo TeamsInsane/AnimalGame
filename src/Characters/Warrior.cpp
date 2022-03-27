@@ -6,12 +6,9 @@
 #include "../Graphics/TextureManager.h"
 #include "SDL.h"
 #include "../Inputs/Input.h"
-#include "../Factory/ObjectFactory.h"
 
 #define FORWARD 1
 #define BACKWARD -1
-
-static Registrar<Warrior> registrar("PLAYER");
 
 Warrior::Warrior(Properties* properties): Character(properties) {
     isSpawned = false;

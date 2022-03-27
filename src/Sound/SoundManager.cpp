@@ -32,6 +32,7 @@ void SoundManager::loadMusic(std::string id, std::string source) {
 
 void SoundManager::playEffect(std::string id) {
     if (Mix_PlayChannel(-1, effectMap[id], 0) == -1) SDL_Log("Error: %s : %s", Mix_GetError(), id.c_str());
+    Mix_Volume(-1, 5);
 }
 
 void SoundManager::loadEffect(std::string id, std::string source) {

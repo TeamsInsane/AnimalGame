@@ -113,6 +113,7 @@ void Engine::render(){
             if (SDL_HasIntersection(&playerRect, &enemiesRect) && delay > 100){
                 delay = 0;
                 player->changeHealth(player->getHealth() - 1);
+                SoundManager::getInstance()->playEffect("hurt");
             }
         }
         int y = 25;

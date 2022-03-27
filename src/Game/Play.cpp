@@ -5,7 +5,6 @@
 #include "Play.h"
 #include "../Maps/MapParser.h"
 #include "../Graphics/TextureManager.h"
-#include "../Factory/ObjectFactory.h"
 #include "../Sound/SoundManager.h"
 
 Play *Play::instance = nullptr;

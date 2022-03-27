@@ -3,10 +3,7 @@
 //
 
 #include "Animals.h"
-#include "../Factory/ObjectFactory.h"
 #include "../Graphics/TextureManager.h"
-
-static Registrar<Animals> registrar("ANIMAL");
 
 Animals::Animals(Properties *properties) : Character(properties) {
 

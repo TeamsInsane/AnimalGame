@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <sounds>
     <music id = "banger" source = "../assets/sounds/music.ogg"/>
+    <effect id = "hurt" source = "../assets/sounds/hurt.ogg"/>
 </sounds>
