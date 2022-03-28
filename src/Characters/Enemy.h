@@ -7,7 +7,6 @@
 
 #include "Character.h"
 #include "../Physics/RigidBody.h"
-#include "../Animations/SeqAnimation.h"
 #include "../Animations/SpriteAnimation.h"
 #include "../Physics/Collider.h"
 
@@ -15,7 +14,7 @@ class Enemy : public Character {
 private:
     Collider *collider;
     RigidBody *rigidBody;
-    SeqAnimation *animation;
+    SpriteAnimation *animation;
     Vector2D lastSafePosition;
 public:
     Enemy(Properties *properties);

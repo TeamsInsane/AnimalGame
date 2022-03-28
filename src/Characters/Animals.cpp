@@ -13,7 +13,6 @@ Animals::Animals(Properties *properties) : Character(properties) {
     collider = new Collider();
 
     animation = new SpriteAnimation();
-    SDL_Log("texture id - %s", textureID.c_str());
     if (textureID == "frog") {
         animation->setProperties(textureID, 1, 2, 200);
         collider->setBuffer(0, 2, 100, 70);
@@ -27,6 +26,8 @@ Animals::Animals(Properties *properties) : Character(properties) {
     else if (textureID == "bird") collider->setBuffer(0, -15, 122, 82);
     else if (textureID == "chicken") collider->setBuffer(0, 1, 110, 70);
     else if (textureID == "hyena") collider->setBuffer(-9, -13, 100, 65);
+    else if (textureID == "snake") collider->setBuffer(-9, -13, 100, 65);
+    else if (textureID == "scorpion") collider->setBuffer(-9, -13, 100, 65);
 }
 
 void Animals::draw() {

@@ -7,7 +7,6 @@
 
 #include "Character.h"
 #include "../Physics/RigidBody.h"
-#include "../Animations/SeqAnimation.h"
 #include "../Animations/SpriteAnimation.h"
 #include "../Physics/Collider.h"
 

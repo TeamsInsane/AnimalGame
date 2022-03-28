@@ -40,7 +40,7 @@ void Play::mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warr
 
     for(int i = 0; i < 9; i++) animals.push_back(renderAnimal());
 
-    enemies.push_back(new Enemy(new Properties("boss_idle", 400, 1700, 250, 250)));
+    enemies.push_back(new Enemy(new Properties("ghost", 500, 1700, 32, 32)));
     Camera::getInstance()->setTarget(player->getOrigin());
 
     SoundManager::getInstance()->playMusic("banger");

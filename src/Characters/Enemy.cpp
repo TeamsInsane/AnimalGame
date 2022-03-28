@@ -3,8 +3,7 @@
 //
 
 #include "Enemy.h"
-#include "../Collisions/CollisionHandler.h"
-#include "../Cameras/Camera.h"
+#include "../Graphics/TextureManager.h"
 
 Enemy::Enemy(Properties *properties) : Character(properties) {
 
@@ -12,21 +11,20 @@ Enemy::Enemy(Properties *properties) : Character(properties) {
     rigidBody->setGravity(3.0f);
 
     collider = new Collider();
-    collider->setBuffer(-90, -85, 90, 10);
+    animation = new SpriteAnimation();
 
-    animation = new SeqAnimation(false);
-    animation->parse("../assets/animation.aml");
-    animation->setCurrentSeq("wizard_idle");
+    animation->setProperties(textureID, 1, 4, 100);
+    collider->setBuffer(0, 0, 110, 65);
 }
 
 void Enemy::draw() {
-    animation->drawFrame(transform->x, transform->y, 1, 1, flip);
+    animation->draw(transform->x, transform->y, width,height, 1, 1, flip);
 
-    //collider->drawBox();
+    collider->drawBox();
 }
 
 void Enemy::clean() {
-
+    TextureManager::getInstance()->dropTexture(textureID);
 }
 
 void Enemy::update(float dt) {
@@ -45,10 +43,10 @@ void Enemy::update(float dt) {
 
     if (CollisionHandler::getInstance()->mapCollision(collider->getBox())) transform->y = lastSafePosition.y;
 
-    if (animation->getIsEnded()){
-        animation->setRepeat(true);
-        animation->setCurrentSeq("wizard_idle");
-    }
+    origin->x = transform->x + width / 2;
+    origin->y = transform->y + height / 2;
+
+    animation->update(dt);
 }
 
 SDL_Rect Enemy::getBox(){

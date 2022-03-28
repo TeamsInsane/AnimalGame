@@ -11,7 +11,6 @@
 #include "../Game/Play.h"
 #include "../Graphics/TextureManager.h"
 #include "../Maps/MapParser.h"
-#include "../Characters/Enemy.h"
 
 Engine* Engine::instance = nullptr;
 
@@ -95,13 +94,12 @@ void Engine::render(){
         if (index != -1){
             SDL_Rect animalRect = animals[index]->getBox();
             if (SDL_HasIntersection(&playerRect, &animalRect)) {
-                animals[index]->setX(player->getOrigin()->x);
+                animals[index]->setX(player->getOrigin()->x - 30);
                 animals[index]->setY(player->getOrigin()->y - 30);
                 if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200) {
                     savedAnimals++;
                     animals.erase(animals.begin() + index);
                     animals.push_back(Play::getInstance()->renderAnimal());
-                    SDL_Log("Animal erased and spawned a new one!");
                     index = -1;
                 }
             }
@@ -140,7 +138,7 @@ void Engine::render(){
 }
 
 void Engine::clean(){
-        player->clean();
+        if (player != nullptr)player->clean();
         for(int i = 0; i < animals.size(); i++) animals[i]->clean();
         for (int i = 0; i != enemies.size(); i++) enemies[i]->clean();
         TextureManager::getInstance()->cleanTexture();
