@@ -17,11 +17,27 @@ class Play {
 private:
     int x = 1000; //1910
     static Play* instance;
+    GameMap *levelMap;
+    std::vector<ImgLayer*> parallaxBg;
+    Warrior *player;
+    std::vector<Enemy*> enemies;
+    std::vector<Animals*> animals;
+    int savedAnimals;
+    int index;
+    int delay;
+    SDL_Texture *heartTexture;
 public:
     static Play *getInstance();
-    void mainGame(GameMap *&levelMap, std::vector<ImgLayer*> &parallaxBg, Warrior *&player, std::vector<Enemy*> &enemies, std::vector<Animals*> &animals);
 
     Animals *renderAnimal();
+
+    void gameUpdate();
+
+    void gameRender();
+
+    void gameInit();
+
+    void gameClean();
 };
 
 

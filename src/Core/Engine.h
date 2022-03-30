@@ -18,18 +18,12 @@
 class Engine {
 private:
     bool running;
-    GameMap* levelMap;
     SDL_Window* window;
     SDL_Renderer* renderer;
-    SDL_Texture *heartTexture;
     static Engine* instance;
-    std::vector<ImgLayer*> parallaxBg;
-    int savedAnimals;
-    int index;
-    int delay;
+    bool working;
 public:
     static Engine* getInstance();
-    GameMap *getGameMap() {return levelMap;}
 
     bool init();
     void clean();
@@ -38,7 +32,6 @@ public:
     void render();
     void events();
 
-    int getSavedAnimalsCount() {return savedAnimals;}
     inline bool isRunning() const{return running;}
     inline SDL_Renderer *getRenderer() const{return renderer;}
     inline SDL_Window *getWindow() const{return window;}

@@ -5,7 +5,6 @@
 #ifndef ANIMALGAME_GAMEOBJECT_H
 #define ANIMALGAME_GAMEOBJECT_H
 
-#include "IObject.h"
 #include "../Physics/Transform.h"
 #include "../Physics/Point.h"
 #include "SDL.h"
@@ -27,7 +26,7 @@ public:
     SDL_RendererFlip flip;
 };
 
-class GameObject : public IObject{
+class GameObject{
 public:
     GameObject(Properties *properties): textureID(properties->textureID), width(properties->width), height(properties->height), flip(properties->flip){
         transform = new Transform(properties->x, properties->y);
