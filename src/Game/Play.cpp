@@ -52,7 +52,7 @@ void Play::gameInit(std::string id, std::string src){
 
     for(int i = 0; i < 1; i++) animals.push_back(renderAnimal());
 
-    enemies.push_back(new Enemy(new Properties("ghost", 1800, 1700, 32, 32)));
+    enemies.push_back(new Enemy(new Properties("ghost", 1800, 2080, 32, 32)));
     Camera::getInstance()->setTarget(player->getOrigin());
 
     SoundManager::getInstance()->playMusic("banger");
@@ -100,7 +100,7 @@ void Play::gameUpdate(){
     if (index != -1){
         SDL_Rect animalRect = animals[index]->getBox();
         if (SDL_HasIntersection(&playerRect, &animalRect)) {
-            animals[index]->setX(player->getOrigin()->x - 30);
+            animals[index]->setX(player->getOrigin()->x - 15);
             animals[index]->setY(player->getOrigin()->y - 30);
             if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200) {
                 savedAnimals++;
@@ -134,7 +134,6 @@ void Play::gameUpdate(){
         Engine::getInstance()->setLevel(2);
     }
 }
-
 
 void Play::gameClean(){
     if (player != nullptr){

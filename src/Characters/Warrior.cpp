@@ -78,7 +78,6 @@ void Warrior::update(float dt) {
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && isGrounded){
         isJumping = true;
         isGrounded = false;
-        rigidBody->applyForceY(UPWARD*jumpForce);
     }
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && isJumping && jumpTime > 0){
         jumpTime -= dt;
