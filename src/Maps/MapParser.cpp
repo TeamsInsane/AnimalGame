@@ -15,8 +15,8 @@ MapParser::MapParser() {
 
 }
 
-bool MapParser::load(std::string source) {
-    return parse("MAP", source);
+bool MapParser::load(std::string id, std::string source) {
+    return parse(id, source);
 }
 
 void MapParser::clean() {

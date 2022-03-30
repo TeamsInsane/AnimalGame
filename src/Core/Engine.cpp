@@ -5,7 +5,6 @@
 #include "Engine.h"
 #include "../Characters/Warrior.h"
 #include "../Characters/Animals.h"
-#include "../Timers/Timer.h"
 #include "../Sound/SoundManager.h"
 #include "../Inputs/Input.h"
 #include "../Game/Play.h"
@@ -46,7 +45,8 @@ bool Engine::init(){
 
     Menu::getInstance()->init(renderer);
 
-    working = false;
+    level = 1;
+    initialized = false;
     running = true;
     return running;
 }
@@ -64,9 +64,21 @@ void Engine::render(){
     SDL_RenderClear(renderer);
     if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections())Menu::getInstance()->draw(renderer);
     else if (Menu::getInstance()->getDisplayGame()){
-        if (!working){
-            Play::getInstance()->gameInit();
-            working = true;
+        switch(level) {
+            case 1:
+                if (!initialized) {
+                    Play::getInstance()->gameInit("Level1", "../assets/maps/level1.tmx");
+                    initialized = true;
+                }
+                break;
+            case 2:
+                if (!initialized) {
+                    Play::getInstance()->gameInit("Level2", "../assets/maps/level2.tmx");
+                    initialized = true;
+                }
+                break;
+            default:
+                exit(EXIT_FAILURE);
         }
         Play::getInstance()->gameRender();
     }  else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
@@ -86,4 +98,9 @@ void Engine::clean(){
 
 void Engine::quit(){
     running = false;
+}
+
+void Engine::setLevel(int num){
+    initialized = false;
+    level = num;
 }

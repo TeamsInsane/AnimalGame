@@ -16,6 +16,9 @@ private:
     RigidBody *rigidBody;
     SpriteAnimation *animation;
     Vector2D lastSafePosition;
+
+    int moveCount;
+    bool moveLeft;
 public:
     Enemy(Properties *properties);
 

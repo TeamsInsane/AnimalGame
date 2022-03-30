@@ -15,7 +15,7 @@
 
 class Play {
 private:
-    int x = 1000; //1910
+    int x = 1910;
     static Play* instance;
     GameMap *levelMap;
     std::vector<ImgLayer*> parallaxBg;
@@ -35,7 +35,7 @@ public:
 
     void gameRender();
 
-    void gameInit();
+    void gameInit(std::string id, std::string src);
 
     void gameClean();
 };

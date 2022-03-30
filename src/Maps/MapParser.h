@@ -23,7 +23,7 @@ private:
     TileLayer* parseTileLayer(TiXmlElement *xmlLayer, TileSetList tileSets, int tileSize, int rowCount, int colCount);
 public:
     static MapParser *getInstance();
-    bool load(std::string source);
+    bool load(std::string id, std::string source);
     void clean();
     GameMap *getMaps(std::string id) {return mapDict[id];}
 };

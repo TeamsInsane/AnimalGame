@@ -49,5 +49,4 @@ protected:
     SDL_RendererFlip flip;
 };
 
-
 #endif //ANIMALGAME_GAMEOBJECT_H

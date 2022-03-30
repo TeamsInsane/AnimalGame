@@ -10,8 +10,13 @@
 
 Play *Play::instance = nullptr;
 
-void Play::gameInit(){
-    if (!MapParser::getInstance()->load("../assets/maps/map2.tmx")){
+Play *Play::getInstance() {
+    if (instance == nullptr) instance = new Play();
+    return instance;
+}
+
+void Play::gameInit(std::string id, std::string src){
+    if (!MapParser::getInstance()->load(id, src)){
         SDL_Log("failed to load map: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
@@ -27,7 +32,7 @@ void Play::gameInit(){
 
     heartTexture = SDL_CreateTextureFromSurface(Engine::getInstance()->getRenderer(), IMG_Load("../assets/menu/hearts.png"));
 
-    levelMap = MapParser::getInstance()->getMaps("MAP");
+    levelMap = MapParser::getInstance()->getMaps(id);
 
     TileLayer *collisionLayer = (TileLayer*) levelMap->getMapLayers().back();
 
@@ -43,11 +48,11 @@ void Play::gameInit(){
 
     TextureManager::getInstance()->parseTextures("../assets/textures.tml");
 
-    player = new Warrior(new Properties("player", 100, 1800, 32, 32));
+    player = new Warrior(new Properties("player", 1500, 1800, 32, 32));
 
-    for(int i = 0; i < 9; i++) animals.push_back(renderAnimal());
+    for(int i = 0; i < 1; i++) animals.push_back(renderAnimal());
 
-    enemies.push_back(new Enemy(new Properties("ghost", 500, 1700, 32, 32)));
+    enemies.push_back(new Enemy(new Properties("ghost", 1800, 1700, 32, 32)));
     Camera::getInstance()->setTarget(player->getOrigin());
 
     SoundManager::getInstance()->playMusic("banger");
@@ -56,7 +61,37 @@ void Play::gameInit(){
 void Play::gameRender(){
     for (int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
     levelMap->render();
+
+    int y = 25;
+    for(int i = 0; i < player->getHealth(); i++){
+        SDL_Rect heartRect;
+        heartRect = {SCREEN_WIDTH - y, 0, 25, 25};
+        y+=25;
+        SDL_RenderCopyEx(Engine::getInstance()->getRenderer(), heartTexture, nullptr, &heartRect, 0, nullptr, SDL_FLIP_NONE);
+    }
+
+    player->draw();
+    for(int i = 0; i < animals.size(); i++) animals[i]->draw();
+    for (int i = 0; i != enemies.size(); i++) enemies[i]->draw();
+
+    Text tempText;
+    std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
+    tempText.init(Engine::getInstance()->getRenderer(), 0, 30, temp.c_str());
+    temp = "Saved animals count: " + std::to_string(savedAnimals);
+    tempText.init(Engine::getInstance()->getRenderer(), 0, 0, temp.c_str());
+}
+
+void Play::gameUpdate(){
+    Menu::getInstance()->checkMenu(Engine::getInstance()->getRenderer());
+    float dt = Timer::getInstance()->getDeltaTime();
+
+    for (int i = 0; i != enemies.size(); i++) enemies[i]->update(dt);
+    player->update(dt);
+    for(int i = 0; i < animals.size(); i++) animals[i]->update(dt);
+    SoundManager::getInstance()->update(player);
+
     SDL_Rect playerRect = player->getBox();
+
     for(int i = 0; i < animals.size() && index == -1; i++) {
         SDL_Rect animalRect = animals[i]->getBox();
         if (SDL_HasIntersection(&playerRect, &animalRect)) index = i;
@@ -85,47 +120,31 @@ void Play::gameRender(){
             SoundManager::getInstance()->playEffect("hurt");
         }
     }
-    int y = 25;
-    for(int i = 0; i < player->getHealth(); i++){
-        SDL_Rect heartRect;
-        heartRect = {SCREEN_WIDTH - y, 0, 25, 25};
-        y+=25;
-        SDL_RenderCopyEx(Engine::getInstance()->getRenderer(), heartTexture, nullptr, &heartRect, 0, nullptr, SDL_FLIP_NONE);
-    }
 
-    player->draw();
-    for(int i = 0; i < animals.size(); i++) animals[i]->draw();
-    for (int i = 0; i != enemies.size(); i++) enemies[i]->draw();
+    if (player->getHealth() == 0) gameClean();
 
-    Text tempText;
-    std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
-    tempText.init(Engine::getInstance()->getRenderer(), 0, 30, temp.c_str());
-    temp = "Saved animals count: " + std::to_string(savedAnimals);
-    tempText.init(Engine::getInstance()->getRenderer(), 0, 0, temp.c_str());
-}
-
-void Play::gameUpdate(){
-    Menu::getInstance()->checkMenu(Engine::getInstance()->getRenderer());
-    float dt = Timer::getInstance()->getDeltaTime();
-    for (int i = 0; i != enemies.size(); i++) enemies[i]->update(dt);
-    player->update(dt);\
-        for(int i = 0; i < animals.size(); i++) animals[i]->update(dt);
-    SoundManager::getInstance()->update(player);
 
     Camera::getInstance()->update(dt);
 
     levelMap->update();
+
+    if (savedAnimals >= 4){
+        MapParser::getInstance()->clean();
+        gameClean();
+        Engine::getInstance()->setLevel(2);
+    }
 }
+
 
 void Play::gameClean(){
-    if (player != nullptr) player->clean();
+    if (player != nullptr){
+        player->clean();
+        player = nullptr;
+    }
     for(int i = 0; i < animals.size(); i++) animals[i]->clean();
+    animals.clear();
     for (int i = 0; i != enemies.size(); i++) enemies[i]->clean();
-}
-
-Play *Play::getInstance() {
-    if (instance == nullptr) instance = new Play();
-    return instance;
+    enemies.clear();
 }
 
 Animals *Play::renderAnimal(){

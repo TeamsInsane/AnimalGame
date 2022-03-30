@@ -21,7 +21,8 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     static Engine* instance;
-    bool working;
+    bool initialized;
+    int level;
 public:
     static Engine* getInstance();
 
@@ -35,6 +36,8 @@ public:
     inline bool isRunning() const{return running;}
     inline SDL_Renderer *getRenderer() const{return renderer;}
     inline SDL_Window *getWindow() const{return window;}
+
+    void setLevel(int num);
 };
 
 

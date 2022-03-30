@@ -15,6 +15,8 @@ Enemy::Enemy(Properties *properties) : Character(properties) {
 
     animation->setProperties(textureID, 1, 4, 100);
     collider->setBuffer(0, 0, 110, 65);
+
+    moveCount = 0;
 }
 
 void Enemy::draw() {
@@ -47,6 +49,17 @@ void Enemy::update(float dt) {
     origin->y = transform->y + height / 2;
 
     animation->update(dt);
+
+
+    if (moveCount < 200 && !moveLeft){
+        moveCount++;
+        transform->x++;
+    } else {
+        if (moveCount == 0) moveLeft = false;
+        else moveLeft = true;
+        moveCount--;
+        transform->x--;
+    }
 }
 
 SDL_Rect Enemy::getBox(){
