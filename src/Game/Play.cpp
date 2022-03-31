@@ -16,13 +16,20 @@ Play *Play::getInstance() {
 }
 
 void Play::gameInit(std::string id, std::string src){
+    player = new Warrior(new Properties("player", 1500, 1800, 32, 32));
+
+    SDL_Log("Enter your name: ");
+    std::string temp;
+    std::cin >> temp;
+    player->setName(temp);
+
     if (!MapParser::getInstance()->load(id, src)){
-        SDL_Log("failed to load map: %s", SDL_GetError());
+        SDL_Log("Failed to load map: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
     if (!SoundManager::getInstance()->parseSounds("../assets/sounds.tml")){
-        SDL_Log("failed to parse sounds: %s", SDL_GetError());
+        SDL_Log("Failed to parse sounds: %s", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -47,8 +54,6 @@ void Play::gameInit(std::string id, std::string src){
     CollisionHandler::getInstance()->setCollisionMap(collisionLayer->getTileMap(), tileSize);
 
     TextureManager::getInstance()->parseTextures("../assets/textures.tml");
-
-    player = new Warrior(new Properties("player", 1500, 1800, 32, 32));
 
     for(int i = 0; i < 1; i++) animals.push_back(renderAnimal());
 
@@ -175,3 +180,5 @@ Animals *Play::renderAnimal(){
             exit(EXIT_FAILURE);
     }
 }
+
+std::string Play::getPlayerNameForMenu() {return player->getName();}

@@ -31,6 +31,7 @@ private:
     bool isCrouching;
     bool isSpawned;
 
+    std::string name;
     int health;
 
     float jumpTime;
@@ -43,16 +44,13 @@ public:
     virtual void update(float dt);
     void animationState();
 
-    bool getIsJumpingOrFalling(){
-        if (isJumping || isFalling) return true;
-        return false;
-    }
+    bool getIsJumpingOrFalling(){ return isJumping || isFalling;}
 
     SDL_Rect getBox();
-
     int getHealth() const;
-
     void changeHealth(int num);
+    std::string getName(){return name;}
+    void setName(std::string text){name = std::move(text); }
 };
 
 

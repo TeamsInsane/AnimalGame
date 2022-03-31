@@ -19,7 +19,7 @@ private:
     bool displayDirections;
     int delayCount;
 
-    Text title, options[3];
+    Text title, options[3], name;
     int position;
 public:
     void init(SDL_Renderer *&renderer);

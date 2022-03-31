@@ -6,6 +6,7 @@
 #include "../Core/Engine.h"
 #include "../Inputs/Input.h"
 #include "../Graphics/TextureManager.h"
+#include "Play.h"
 
 Menu *Menu::instance = nullptr;
 
@@ -30,6 +31,9 @@ void Menu::init(SDL_Renderer *&renderer) {
     strcpy(tempText, "Izhod");
     options[2].initCenter(renderer, SCREEN_HEIGHT / 2 + 220, 65, tempText);
 
+    strcpy(tempText, "Ime: ");
+    name.initCenter(renderer, SCREEN_HEIGHT / 2 + 400, 30, tempText);
+
     arrowRect = {SCREEN_WIDTH /2 + 150, SCREEN_HEIGHT / 2 + 50 - 5, 75, 50};
 
     surface = IMG_Load("../assets/menu/arrow.png");
@@ -41,6 +45,7 @@ void Menu::init(SDL_Renderer *&renderer) {
 void Menu::draw(SDL_Renderer *&renderer) {
     SDL_RenderCopyEx(renderer, background, nullptr, &bgRect, 0, nullptr, SDL_FLIP_NONE);
     title.draw();
+    name.draw();
     for (int i = 0; i<3; i++) options[i].draw();
     SDL_RenderCopyEx(renderer, arrow, nullptr, &arrowRect, 0, nullptr, SDL_FLIP_NONE);
 }
@@ -103,7 +108,6 @@ void Menu::update() {
         Engine::getInstance()->clean();
         Engine::getInstance()->quit();
     }
-
 }
 
 void Menu::checkMenu(SDL_Renderer *renderer){
@@ -111,6 +115,9 @@ void Menu::checkMenu(SDL_Renderer *renderer){
         if (displayGame){
             char tempText[20] = "Nadaljuj";
             options[0].initCenter(renderer, SCREEN_HEIGHT / 2 + 20, 65, tempText);
+            strcpy(tempText, "Ime: ");
+            strcat(tempText, Play::getInstance()->getPlayerNameForMenu().c_str());
+            name.initCenter(renderer, SCREEN_HEIGHT / 2 + 400, 30, tempText);
         }
         displayGame = false;
         displayDirections = false;

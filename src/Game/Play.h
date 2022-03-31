@@ -38,6 +38,8 @@ public:
     void gameInit(std::string id, std::string src);
 
     void gameClean();
+
+    std::string getPlayerNameForMenu();
 };
 
 
