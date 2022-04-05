@@ -10,6 +10,7 @@
 #include "../Game/Play.h"
 #include "../Graphics/TextureManager.h"
 #include "../Maps/MapParser.h"
+#include "../Leaderboards/Leaderboard.h"
 
 Engine* Engine::instance = nullptr;
 
@@ -44,6 +45,7 @@ bool Engine::init(){
     }
 
     Menu::getInstance()->init(renderer);
+    Leaderboard::getInstance()->init(renderer);
 
     level = 1;
     initialized = false;
@@ -51,9 +53,10 @@ bool Engine::init(){
     return running;
 }
 void Engine::update(){
-    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->update();
+    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections() && !Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->update();
     else if (Menu::getInstance()->getDisplayGame()) Play::getInstance()->gameUpdate();
     else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->checkMenu(renderer);
+    else if (Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->checkLeaderboard(renderer);
 }
 
 void Engine::events() {
@@ -62,7 +65,7 @@ void Engine::events() {
 
 void Engine::render(){
     SDL_RenderClear(renderer);
-    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections())Menu::getInstance()->draw(renderer);
+    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections() && !Menu::getInstance()->getDisplayLeaderboard())Menu::getInstance()->draw(renderer);
     else if (Menu::getInstance()->getDisplayGame()){
         switch(level) {
             case 1:
@@ -82,6 +85,7 @@ void Engine::render(){
         }
         Play::getInstance()->gameRender();
     }  else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
+    else if (Menu::getInstance()->getDisplayLeaderboard()) Leaderboard::getInstance()->draw();
 
     SDL_RenderPresent(renderer);
 }

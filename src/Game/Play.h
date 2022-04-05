@@ -40,6 +40,8 @@ public:
     void gameClean();
 
     std::string getPlayerNameForMenu();
+
+    void gameOver();
 };
 
 

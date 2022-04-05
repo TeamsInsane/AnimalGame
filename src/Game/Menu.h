@@ -17,9 +17,10 @@ private:
     bool moveArrow;
     bool displayGame;
     bool displayDirections;
+    bool displayLeaderboard;
     int delayCount;
 
-    Text title, options[3], name;
+    Text title, options[4], name;
     int position;
 public:
     void init(SDL_Renderer *&renderer);
@@ -39,6 +40,10 @@ public:
     bool getDisplayDirections() const;
 
     void loadDirections(SDL_Renderer *renderer);
+
+    bool getDisplayLeaderboard() const;
+
+    void checkLeaderboard(SDL_Renderer *renderer);
 };
 
 

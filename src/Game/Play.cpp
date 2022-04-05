@@ -7,6 +7,7 @@
 #include "../Graphics/TextureManager.h"
 #include "../Sound/SoundManager.h"
 #include "../Timers/Timer.h"
+#include "../Leaderboards/Leaderboard.h"
 
 Play *Play::instance = nullptr;
 
@@ -19,8 +20,9 @@ void Play::gameInit(std::string id, std::string src){
     player = new Warrior(new Properties("player", 1500, 1800, 32, 32));
 
     SDL_Log("Enter your name: ");
-    std::string temp;
-    std::cin >> temp;
+    std::string temp = "Teams";
+    //fflush(stdin);
+    //std::getline(std::cin, temp);
     player->setName(temp);
 
     if (!MapParser::getInstance()->load(id, src)){
@@ -126,7 +128,9 @@ void Play::gameUpdate(){
         }
     }
 
-    if (player->getHealth() == 0) gameClean();
+    if (player->getHealth() == 2){
+        gameOver();
+    }
 
 
     Camera::getInstance()->update(dt);
@@ -149,6 +153,11 @@ void Play::gameClean(){
     animals.clear();
     for (int i = 0; i != enemies.size(); i++) enemies[i]->clean();
     enemies.clear();
+}
+
+void Play::gameOver(){
+    Leaderboard::getInstance()->addToFile(player->getName(), savedAnimals);
+    exit(EXIT_SUCCESS);
 }
 
 Animals *Play::renderAnimal(){

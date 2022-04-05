@@ -45,7 +45,6 @@ void Text::initCenter(SDL_Renderer *renderer, int y, int size, char *text) {
 
     SDL_FreeSurface(surfaceMessage);
     TTF_CloseFont(font);
-
 }
 
 void Text::draw() {
