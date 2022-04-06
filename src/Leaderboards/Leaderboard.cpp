@@ -7,7 +7,6 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "Leaderboard.h"
-#include "../Inputs/Input.h"
 
 Leaderboard *Leaderboard::instance = nullptr;
 
@@ -57,7 +56,7 @@ void Leaderboard::addToFile(std::string name, int score){
             }
         }
         map.erase(highName);
-        data << highName << std::endl << highScore << std::endl;
+        data << highName << " " << highScore << std::endl;
     }
 
     data.close();

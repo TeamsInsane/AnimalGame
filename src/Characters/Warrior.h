@@ -31,6 +31,8 @@ private:
     bool isCrouching;
     bool isSpawned;
 
+    int animationStateNumber;
+
     std::string name;
     int health;
 
@@ -51,6 +53,15 @@ public:
     void changeHealth(int num);
     std::string getName(){return name;}
     void setName(std::string text){name = std::move(text); }
+
+    void setAnimationStateNumber(int number);
+
+    void setY(float y);
+    void setX(float x);
+
+    void setCollider(int x, int y, int w, int h);
+
+    void setAnimationSate(float dt);
 };
 
 

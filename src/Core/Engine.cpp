@@ -2,6 +2,7 @@
 // Created by TeamsInsane on 15. 02. 2022.
 //
 
+#include <fstream>
 #include "Engine.h"
 #include "../Characters/Warrior.h"
 #include "../Characters/Animals.h"
@@ -11,6 +12,7 @@
 #include "../Graphics/TextureManager.h"
 #include "../Maps/MapParser.h"
 #include "../Leaderboards/Leaderboard.h"
+#include "../Replays/Replay.h"
 
 Engine* Engine::instance = nullptr;
 
@@ -46,17 +48,19 @@ bool Engine::init(){
 
     Menu::getInstance()->init(renderer);
     Leaderboard::getInstance()->init(renderer);
+    Replay::getInstance()->initReplay(renderer);
 
     level = 1;
     initialized = false;
     running = true;
     return running;
 }
+
 void Engine::update(){
-    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections() && !Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->update();
+    if (Menu::getInstance()->getDisplayMenu()) Menu::getInstance()->update();
     else if (Menu::getInstance()->getDisplayGame()) Play::getInstance()->gameUpdate();
-    else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->checkMenu(renderer);
-    else if (Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->checkLeaderboard(renderer);
+    else if (Menu::getInstance()->getDisplayDirections() || Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->checkMenu(renderer);
+    else if (Menu::getInstance()->getDisplayReplay()) Replay::getInstance()->update();
 }
 
 void Engine::events() {
@@ -65,18 +69,21 @@ void Engine::events() {
 
 void Engine::render(){
     SDL_RenderClear(renderer);
-    if (!Menu::getInstance()->getDisplayGame() && !Menu::getInstance()->getDisplayDirections() && !Menu::getInstance()->getDisplayLeaderboard())Menu::getInstance()->draw(renderer);
+    if (Menu::getInstance()->getDisplayMenu()) Menu::getInstance()->draw(renderer);
     else if (Menu::getInstance()->getDisplayGame()){
         switch(level) {
             case 1:
                 if (!initialized) {
-                    Play::getInstance()->gameInit("Level1", "../assets/maps/level1.tmx");
+                    SDL_Log("Test");
+                    std::ofstream data("Replay.txt");
+                    data.close();
+                    Play::getInstance()->gameInit("Level1", "../assets/maps/level1.tmx", renderer);
                     initialized = true;
                 }
                 break;
             case 2:
                 if (!initialized) {
-                    Play::getInstance()->gameInit("Level2", "../assets/maps/level2.tmx");
+                    Play::getInstance()->gameInit("Level2", "../assets/maps/level2.tmx", renderer);
                     initialized = true;
                 }
                 break;
@@ -84,9 +91,9 @@ void Engine::render(){
                 exit(EXIT_FAILURE);
         }
         Play::getInstance()->gameRender();
-    }  else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
+    } else if (Menu::getInstance()->getDisplayDirections()) Menu::getInstance()->loadDirections(renderer);
     else if (Menu::getInstance()->getDisplayLeaderboard()) Leaderboard::getInstance()->draw();
-
+    else if (Menu::getInstance()->getDisplayReplay()) Replay::getInstance()->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -108,3 +115,5 @@ void Engine::setLevel(int num){
     initialized = false;
     level = num;
 }
+
+void Engine::setInitialized(){initialized = !initialized;}

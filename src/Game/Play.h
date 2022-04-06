@@ -26,6 +26,7 @@ private:
     int index;
     int delay;
     SDL_Texture *heartTexture;
+    SDL_Renderer *renderer;
 public:
     static Play *getInstance();
 
@@ -35,13 +36,17 @@ public:
 
     void gameRender();
 
-    void gameInit(std::string id, std::string src);
+    void gameInit(std::string id, std::string src, SDL_Renderer *renderer);
 
     void gameClean();
 
     std::string getPlayerNameForMenu();
 
     void gameOver();
+
+    float getPlayerPositionX();
+
+    float getPlayerPositionY();
 };
 
 

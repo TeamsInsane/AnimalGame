@@ -27,6 +27,7 @@ Warrior::Warrior(Properties* properties): Character(properties) {
 
     animation = new SpriteAnimation();
     animation->setProperties(textureID, 1, 6, 100);
+    animationStateNumber = 1;
 }
 
 void Warrior::draw() {
@@ -40,6 +41,7 @@ void Warrior::clean() {
 }
 
 void Warrior::update(float dt) {
+    Camera::getInstance()->setTarget(getOrigin());
     if (isGrounded && !isSpawned){
         isSpawned = true;
         rigidBody->setGravity(GRAVITY);
@@ -125,7 +127,7 @@ void Warrior::update(float dt) {
 }
 
 void Warrior::animationState() {
-    //Idling
+    //Idling - 1
     animation->setProperties("player_idle", 1, 4, 100);
 
     //Running
@@ -144,6 +146,31 @@ void Warrior::animationState() {
     if (isAttacking) animation->setProperties("player_attack", 1, 6, 100);
 }
 
+void Warrior::setAnimationStateNumber(int number){
+    switch (number) {
+        case 1:
+            animationStateNumber = 1;
+            break;
+        case 2:
+            animationStateNumber = 2;
+            break;
+        case 3:
+            animationStateNumber = 3;
+            break;
+        case 4:
+            animationStateNumber = 4;
+            break;
+        case 5:
+            animationStateNumber = 5;
+            break;
+        case 6:
+            animationStateNumber = 6;
+            break;
+        default:
+            SDL_Log("Error, wrong animation state number!");
+    }
+}
+
 SDL_Rect Warrior::getBox(){
     return collider->getBox();
 }
@@ -151,3 +178,20 @@ SDL_Rect Warrior::getBox(){
 int Warrior::getHealth() const{return health;}
 
 void Warrior::changeHealth(int num) {health = num;}
+
+void Warrior::setX(float x){
+    transform->x = x;
+}
+
+void Warrior::setY(float y){
+    transform->y = y;
+}
+
+void Warrior::setCollider(int x, int y, int w, int h){
+    collider->set(x, y, w, h);
+}
+
+void Warrior::setAnimationSate(float dt){
+    animation->setProperties("player_idle", 1, 4, 100);
+    animation->update(dt);
+}

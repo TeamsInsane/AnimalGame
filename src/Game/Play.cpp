@@ -8,6 +8,8 @@
 #include "../Sound/SoundManager.h"
 #include "../Timers/Timer.h"
 #include "../Leaderboards/Leaderboard.h"
+#include "../Inputs/Input.h"
+#include "../Replays/Replay.h"
 
 Play *Play::instance = nullptr;
 
@@ -16,11 +18,12 @@ Play *Play::getInstance() {
     return instance;
 }
 
-void Play::gameInit(std::string id, std::string src){
+void Play::gameInit(std::string id, std::string src, SDL_Renderer *renderer){
+    this->renderer = renderer;
     player = new Warrior(new Properties("player", 1500, 1800, 32, 32));
 
     SDL_Log("Enter your name: ");
-    std::string temp = "Teams";
+    std::string temp = "TeamsInsane";
     //fflush(stdin);
     //std::getline(std::cin, temp);
     player->setName(temp);
@@ -39,7 +42,7 @@ void Play::gameInit(std::string id, std::string src){
     index = -1;
     delay = 0;
 
-    heartTexture = SDL_CreateTextureFromSurface(Engine::getInstance()->getRenderer(), IMG_Load("../assets/menu/hearts.png"));
+    heartTexture = SDL_CreateTextureFromSurface(renderer, IMG_Load("../assets/menu/hearts.png"));
 
     levelMap = MapParser::getInstance()->getMaps(id);
 
@@ -60,7 +63,6 @@ void Play::gameInit(std::string id, std::string src){
     for(int i = 0; i < 1; i++) animals.push_back(renderAnimal());
 
     enemies.push_back(new Enemy(new Properties("ghost", 1800, 2080, 32, 32)));
-    Camera::getInstance()->setTarget(player->getOrigin());
 
     SoundManager::getInstance()->playMusic("banger");
 }
@@ -74,7 +76,7 @@ void Play::gameRender(){
         SDL_Rect heartRect;
         heartRect = {SCREEN_WIDTH - y, 0, 25, 25};
         y+=25;
-        SDL_RenderCopyEx(Engine::getInstance()->getRenderer(), heartTexture, nullptr, &heartRect, 0, nullptr, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(renderer, heartTexture, nullptr, &heartRect, 0, nullptr, SDL_FLIP_NONE);
     }
 
     player->draw();
@@ -83,13 +85,14 @@ void Play::gameRender(){
 
     Text tempText;
     std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
-    tempText.init(Engine::getInstance()->getRenderer(), 0, 30, temp.c_str());
+    tempText.init(renderer, 0, 30, temp.c_str());
     temp = "Saved animals count: " + std::to_string(savedAnimals);
-    tempText.init(Engine::getInstance()->getRenderer(), 0, 0, temp.c_str());
+    tempText.init(renderer, 0, 0, temp.c_str());
 }
 
 void Play::gameUpdate(){
-    Menu::getInstance()->checkMenu(Engine::getInstance()->getRenderer());
+    Replay::getInstance()->saveMovement();
+    Menu::getInstance()->checkMenu(renderer);
     float dt = Timer::getInstance()->getDeltaTime();
 
     for (int i = 0; i != enemies.size(); i++) enemies[i]->update(dt);
@@ -132,7 +135,6 @@ void Play::gameUpdate(){
         gameOver();
     }
 
-
     Camera::getInstance()->update(dt);
 
     levelMap->update();
@@ -157,7 +159,27 @@ void Play::gameClean(){
 
 void Play::gameOver(){
     Leaderboard::getInstance()->addToFile(player->getName(), savedAnimals);
-    exit(EXIT_SUCCESS);
+    Text gameOverText;
+    char tempText[] = "GAME OVER!";
+    gameOverText.initCenter(renderer, SCREEN_WIDTH / 2, 100, tempText);
+    SDL_Surface *surface = IMG_Load("../assets/images/menuBackground.png");
+    SDL_Texture *background = SDL_CreateTextureFromSurface(Engine::getInstance()->getRenderer(), surface);
+    SDL_Rect bgRect = {0, 0, 1920, 1080};
+    SDL_FreeSurface(surface);
+    do {
+        SDL_RenderClear(renderer);
+        SDL_RenderCopyEx(renderer, background, nullptr, &bgRect, 0, nullptr, SDL_FLIP_NONE);
+        gameOverText.draw();
+        if (Input::getInstance()->getKeyDown(SDL_SCANCODE_ESCAPE)) break;
+        SDL_RenderPresent(renderer);
+    } while (true);
+
+    Menu::getInstance()->setDisplayLeaderboard(true);
+    gameClean();
+    Menu::getInstance()->init(renderer);
+    TextureManager::getInstance()->cleanTexture();
+    MapParser::getInstance()->clean();
+    Engine::getInstance()->setInitialized();
 }
 
 Animals *Play::renderAnimal(){
@@ -191,3 +213,7 @@ Animals *Play::renderAnimal(){
 }
 
 std::string Play::getPlayerNameForMenu() {return player->getName();}
+
+float Play::getPlayerPositionX() {return player->getOrigin()->x;}
+
+float Play::getPlayerPositionY() {return player->getOrigin()->y;}

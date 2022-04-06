@@ -18,13 +18,16 @@ private:
     bool displayGame;
     bool displayDirections;
     bool displayLeaderboard;
+    bool displayMenu;
+    bool displayReplay;
+
     int delayCount;
 
-    Text title, options[4], name;
+    Text title, options[5], name;
     int position;
 public:
-    void init(SDL_Renderer *&renderer);
-    void draw(SDL_Renderer *&renderer);
+    void init(SDL_Renderer *renderer);
+    void draw(SDL_Renderer *renderer);
 
     void moveDown();
     void moveUp();
@@ -42,8 +45,11 @@ public:
     void loadDirections(SDL_Renderer *renderer);
 
     bool getDisplayLeaderboard() const;
+    bool getDisplayReplay() const;
 
-    void checkLeaderboard(SDL_Renderer *renderer);
+    void setDisplayLeaderboard(bool boolean);
+
+    bool getDisplayMenu() const;
 };
 
 
