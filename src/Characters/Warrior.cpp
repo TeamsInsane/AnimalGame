@@ -27,7 +27,6 @@ Warrior::Warrior(Properties* properties): Character(properties) {
 
     animation = new SpriteAnimation();
     animation->setProperties(textureID, 1, 6, 100);
-    animationStateNumber = 1;
 }
 
 void Warrior::draw() {
@@ -127,7 +126,7 @@ void Warrior::update(float dt) {
 }
 
 void Warrior::animationState() {
-    //Idling - 1
+    //Idling
     animation->setProperties("player_idle", 1, 4, 100);
 
     //Running
@@ -144,31 +143,9 @@ void Warrior::animationState() {
 
     //Attacking
     if (isAttacking) animation->setProperties("player_attack", 1, 6, 100);
-}
 
-void Warrior::setAnimationStateNumber(int number){
-    switch (number) {
-        case 1:
-            animationStateNumber = 1;
-            break;
-        case 2:
-            animationStateNumber = 2;
-            break;
-        case 3:
-            animationStateNumber = 3;
-            break;
-        case 4:
-            animationStateNumber = 4;
-            break;
-        case 5:
-            animationStateNumber = 5;
-            break;
-        case 6:
-            animationStateNumber = 6;
-            break;
-        default:
-            SDL_Log("Error, wrong animation state number!");
-    }
+    //Hurt
+    if (isHurt) animation->setProperties("player_hurt", 1, 4, 100);
 }
 
 SDL_Rect Warrior::getBox(){
@@ -192,6 +169,14 @@ void Warrior::setCollider(int x, int y, int w, int h){
 }
 
 void Warrior::setAnimationSate(float dt){
-    animation->setProperties("player_idle", 1, 4, 100);
+    animation->setProperties("player_idle", 1, 4, 10);
     animation->update(dt);
+}
+
+void Warrior::setIsHurt(){
+    isHurt = true;
+}
+
+void Warrior::resetIsHurt(){
+    isHurt = false;
 }

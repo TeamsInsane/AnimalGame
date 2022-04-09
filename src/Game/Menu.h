@@ -50,6 +50,12 @@ public:
     void setDisplayLeaderboard(bool boolean);
 
     bool getDisplayMenu() const;
+
+    bool getDisplayGameOver() const;
+
+    void resetMenu(SDL_Renderer *renderer);
+
+    void resetDisplayGame();
 };
 
 

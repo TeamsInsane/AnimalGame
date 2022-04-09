@@ -30,8 +30,7 @@ private:
     bool isAttacking;
     bool isCrouching;
     bool isSpawned;
-
-    int animationStateNumber;
+    bool isHurt;
 
     std::string name;
     int health;
@@ -46,15 +45,13 @@ public:
     virtual void update(float dt);
     void animationState();
 
-    bool getIsJumpingOrFalling(){ return isJumping || isFalling;}
+    bool getIsJumpingOrFalling() const{ return isJumping || isFalling;}
 
     SDL_Rect getBox();
     int getHealth() const;
     void changeHealth(int num);
     std::string getName(){return name;}
-    void setName(std::string text){name = std::move(text); }
-
-    void setAnimationStateNumber(int number);
+    void setName(std::string text){name = std::move(text);}
 
     void setY(float y);
     void setX(float x);
@@ -62,6 +59,10 @@ public:
     void setCollider(int x, int y, int w, int h);
 
     void setAnimationSate(float dt);
+
+    void setIsHurt();
+
+    void resetIsHurt();
 };
 
 

@@ -7,6 +7,7 @@
 
 
 #include <SDL.h>
+#include <map>
 #include "../Maps/GameMap.h"
 #include "../Core/Engine.h"
 #include "../Characters/Warrior.h"
@@ -15,7 +16,6 @@
 
 class Play {
 private:
-    int x = 1910;
     static Play* instance;
     GameMap *levelMap;
     std::vector<ImgLayer*> parallaxBg;
@@ -23,10 +23,19 @@ private:
     std::vector<Enemy*> enemies;
     std::vector<Animals*> animals;
     int savedAnimals;
+    int remainingAnimals;
     int index;
     int delay;
+    bool initialized;
+    int enemySize;
+    int startTime;
     SDL_Texture *heartTexture;
     SDL_Renderer *renderer;
+    SDL_Texture *background;
+    SDL_Rect bgRect;
+    Text gameOverText;
+    std::multimap<int, int> animalSpawnLocations, enemySpawnLocations;
+    bool displayGameOver;
 public:
     static Play *getInstance();
 
@@ -47,6 +56,18 @@ public:
     float getPlayerPositionX();
 
     float getPlayerPositionY();
+
+    bool getDisplayGameOver() const;
+
+    void resetDisplayGameOver();
+
+    void setSpawnLocations();
+
+    Enemy * renderEnemy();
+
+    void setEnemiesSpawn();
+
+    int getStartTime();
 };
 
 

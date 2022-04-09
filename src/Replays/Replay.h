@@ -8,6 +8,10 @@
 #include "../Characters/Warrior.h"
 #include <SDL_render.h>
 
+struct Position{
+    float x, y;
+};
+
 class Replay {
 private:
     static Replay *instance;
@@ -18,6 +22,7 @@ private:
     SDL_Renderer *renderer;
     int readCount;
     Text replayText;
+    int initialized;
 public:
     Replay();
 
@@ -33,6 +38,8 @@ public:
     void update();
 
     void resetReadCount();
+
+    void clean();
 };
 
 

@@ -6,6 +6,7 @@
     <texture id="player_fall" source="../assets/player/player_fall.png"/>
     <texture id="player_crouch" source="../assets/player/player_crouch.png"/>
     <texture id="player_attack" source="../assets/player/player_attack.png"/>
+    <texture id="player_hurt" source="../assets/player/player_hurt.png"/>
 
     <texture id="bg" source="../assets/images/Background.jpg"/>
     <texture id="menuBG" source="../assets/images/menuBackground.png"/>

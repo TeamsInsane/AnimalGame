@@ -22,7 +22,9 @@ private:
     SDL_Renderer* renderer;
     static Engine* instance;
     bool initialized;
+    bool fullscreen;
     int level;
+    int delay;
 public:
     static Engine* getInstance();
 
@@ -35,6 +37,7 @@ public:
 
     inline bool isRunning() const{return running;}
     inline SDL_Renderer *getRenderer() const{return renderer;}
+    inline SDL_Window *getWindow() const{return window;}
 
     void setLevel(int num);
     void setInitialized();

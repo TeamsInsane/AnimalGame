@@ -8,25 +8,25 @@
 #include "../Sound/SoundManager.h"
 #include "../Timers/Timer.h"
 #include "../Leaderboards/Leaderboard.h"
-#include "../Inputs/Input.h"
 #include "../Replays/Replay.h"
 
 Play *Play::instance = nullptr;
 
 Play *Play::getInstance() {
-    if (instance == nullptr) instance = new Play();
+    if (instance == nullptr)
+        instance = new Play();
     return instance;
 }
 
 void Play::gameInit(std::string id, std::string src, SDL_Renderer *renderer){
+    if (id == "Level1") startTime = SDL_GetTicks()/1000;
+    SDL_Log("Crash");
+    setSpawnLocations();
+    SDL_Log("animal %i, enemies %i", enemySpawnLocations.size(), animalSpawnLocations.size());
     this->renderer = renderer;
-    player = new Warrior(new Properties("player", 1500, 1800, 32, 32));
+    player = new Warrior(new Properties("player", rand()%(2800-1040)+1040, 2150, 32, 32));
 
-    SDL_Log("Enter your name: ");
-    std::string temp = "TeamsInsane";
-    //fflush(stdin);
-    //std::getline(std::cin, temp);
-    player->setName(temp);
+    player->setName("Guest1");
 
     if (!MapParser::getInstance()->load(id, src)){
         SDL_Log("Failed to load map: %s", SDL_GetError());
@@ -38,9 +38,13 @@ void Play::gameInit(std::string id, std::string src, SDL_Renderer *renderer){
         exit(EXIT_FAILURE);
     }
 
+    initialized = false;
+    displayGameOver = false;
     savedAnimals = 0;
+    remainingAnimals = 7;
     index = -1;
     delay = 0;
+    enemySize = 0;
 
     heartTexture = SDL_CreateTextureFromSurface(renderer, IMG_Load("../assets/menu/hearts.png"));
 
@@ -86,8 +90,10 @@ void Play::gameRender(){
     Text tempText;
     std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
     tempText.init(renderer, 0, 30, temp.c_str());
-    temp = "Saved animals count: " + std::to_string(savedAnimals);
+    temp = "Saved animals: " + std::to_string(savedAnimals) + ", remaining animals: " + std::to_string(remainingAnimals);
     tempText.init(renderer, 0, 0, temp.c_str());
+
+    Timer::getInstance()->displayTime();
 }
 
 void Play::gameUpdate(){
@@ -107,13 +113,20 @@ void Play::gameUpdate(){
         if (SDL_HasIntersection(&playerRect, &animalRect)) index = i;
     }
 
+    if (enemies.size() - enemySize >= 5){
+        setEnemiesSpawn();
+        enemySize = enemies.size();
+    }
+
     if (index != -1){
         SDL_Rect animalRect = animals[index]->getBox();
         if (SDL_HasIntersection(&playerRect, &animalRect)) {
             animals[index]->setX(player->getOrigin()->x - 15);
             animals[index]->setY(player->getOrigin()->y - 30);
-            if (animalRect.x > 604 && animalRect.x < 800 && animalRect.y > 2200) {
+            if (animalRect.x > 1390 && animalRect.x < 1620 && animalRect.y > 2150) {
                 savedAnimals++;
+                remainingAnimals--;
+                for(int i = 0; i < rand()%(5-2)+2; i++) enemies.push_back(renderEnemy());
                 animals.erase(animals.begin() + index);
                 animals.push_back(Play::getInstance()->renderAnimal());
                 index = -1;
@@ -121,25 +134,27 @@ void Play::gameUpdate(){
         }
     }
 
+    delay++;
+    if (delay > 100) player->resetIsHurt();
     for(int i = 0; i < enemies.size(); i++){
         SDL_Rect enemiesRect = enemies[i]->getBox();
-        delay++;
         if (SDL_HasIntersection(&playerRect, &enemiesRect) && delay > 100){
             delay = 0;
             player->changeHealth(player->getHealth() - 1);
             SoundManager::getInstance()->playEffect("hurt");
+            player->setIsHurt();
         }
     }
 
-    if (player->getHealth() == 2){
-        gameOver();
+    if (player->getHealth() == 0) {
+        displayGameOver = true;
     }
 
     Camera::getInstance()->update(dt);
 
     levelMap->update();
 
-    if (savedAnimals >= 4){
+    if (remainingAnimals <= 0){
         MapParser::getInstance()->clean();
         gameClean();
         Engine::getInstance()->setLevel(2);
@@ -147,7 +162,8 @@ void Play::gameUpdate(){
 }
 
 void Play::gameClean(){
-    if (player != nullptr){
+    if (player != nullptr) {
+        Leaderboard::getInstance()->addToFile(player->getName(), savedAnimals);
         player->clean();
         player = nullptr;
     }
@@ -155,61 +171,66 @@ void Play::gameClean(){
     animals.clear();
     for (int i = 0; i != enemies.size(); i++) enemies[i]->clean();
     enemies.clear();
+    parallaxBg.clear();
+    MapParser::getInstance()->clean();
+    SDL_DestroyTexture(heartTexture);
 }
 
 void Play::gameOver(){
-    Leaderboard::getInstance()->addToFile(player->getName(), savedAnimals);
-    Text gameOverText;
-    char tempText[] = "GAME OVER!";
-    gameOverText.initCenter(renderer, SCREEN_WIDTH / 2, 100, tempText);
-    SDL_Surface *surface = IMG_Load("../assets/images/menuBackground.png");
-    SDL_Texture *background = SDL_CreateTextureFromSurface(Engine::getInstance()->getRenderer(), surface);
-    SDL_Rect bgRect = {0, 0, 1920, 1080};
-    SDL_FreeSurface(surface);
-    do {
-        SDL_RenderClear(renderer);
-        SDL_RenderCopyEx(renderer, background, nullptr, &bgRect, 0, nullptr, SDL_FLIP_NONE);
-        gameOverText.draw();
-        if (Input::getInstance()->getKeyDown(SDL_SCANCODE_ESCAPE)) break;
-        SDL_RenderPresent(renderer);
-    } while (true);
-
-    Menu::getInstance()->setDisplayLeaderboard(true);
-    gameClean();
-    Menu::getInstance()->init(renderer);
-    TextureManager::getInstance()->cleanTexture();
-    MapParser::getInstance()->clean();
-    Engine::getInstance()->setInitialized();
+    if (!initialized) {
+        Engine::getInstance()->setLevel(1);
+        Menu::getInstance()->resetDisplayGame();
+        char tempText[] = "GAME OVER!";
+        gameOverText.initCenter(renderer, SCREEN_HEIGHT / 2, 100, tempText);
+        SDL_Surface *surface = IMG_Load("../assets/images/menuBackground.png");
+        background = SDL_CreateTextureFromSurface(Engine::getInstance()->getRenderer(), surface);
+        bgRect = {0, 0, 1920, 1080};
+        SDL_FreeSurface(surface);
+        gameClean();
+        initialized = true;
+    }
+    SDL_RenderCopyEx(renderer, background, nullptr, &bgRect, 0, nullptr, SDL_FLIP_NONE);
+    gameOverText.draw();
 }
 
 Animals *Play::renderAnimal(){
-    x +=50;
+    auto it = animalSpawnLocations.begin();
+    for(int i = 0; i < rand()%(animalSpawnLocations.size() - 0) + 0; i++) it++;
+    int x = it->first, y = it->second;
     switch (rand()%(11-0)+0) {
         case 0:
-            return new Animals(new Properties("bird", x, 2000, 32, 32));
+            return new Animals(new Properties("bird", x, y, 32, 32));
         case 1:
-            return new Animals(new Properties("cat1", x, 2000, 48, 48));
+            return new Animals(new Properties("cat1", x, y, 48, 48));
         case 2:
-            return new Animals(new Properties("cat2", x, 2000, 48, 48));
+            return new Animals(new Properties("cat2", x, y, 48, 48));
         case 3:
-            return new Animals(new Properties("chicken", x, 2000, 32, 32));
+            return new Animals(new Properties("chicken", x, y, 32, 32));
         case 4:
-            return new Animals(new Properties("dog1", x, 2000, 48, 48));
+            return new Animals(new Properties("dog1", x, y, 48, 48));
         case 5:
-            return new Animals(new Properties("dog2", x, 2000, 48, 48));
+            return new Animals(new Properties("dog2", x, y, 48, 48));
         case 6:
-            return new Animals(new Properties("hyena", x, 2000, 48, 48));
+            return new Animals(new Properties("hyena", x, y, 48, 48));
         case 7:
-            return new Animals(new Properties("rat", x, 2000, 32, 32));
+            return new Animals(new Properties("rat", x, y, 32, 32));
         case 8:
-            return  new Animals(new Properties("scorpion", x, 2000, 48, 48));
+            return  new Animals(new Properties("scorpion", x, y, 48, 48));
         case 9:
-            return new Animals(new Properties("snake", x, 2000, 48, 48));
+            return new Animals(new Properties("snake", x, y, 48, 48));
         case 10:
-            return new Animals(new Properties("frog", x, 2000, 32, 32));
+            return new Animals(new Properties("frog", x, y, 32, 32));
         default:
             exit(EXIT_FAILURE);
     }
+}
+
+Enemy *Play::renderEnemy(){
+    auto it = enemySpawnLocations.begin();
+    for(int i = 0; i < rand()%(enemySpawnLocations.size() + 1) + 0; i++) it++;
+    int x = it->first, y = it->second;
+    enemySpawnLocations.erase(it);
+    return new Enemy(new Properties("ghost", x - 100, y, 32, 32));
 }
 
 std::string Play::getPlayerNameForMenu() {return player->getName();}
@@ -217,3 +238,29 @@ std::string Play::getPlayerNameForMenu() {return player->getName();}
 float Play::getPlayerPositionX() {return player->getOrigin()->x;}
 
 float Play::getPlayerPositionY() {return player->getOrigin()->y;}
+
+bool Play::getDisplayGameOver() const {return displayGameOver;}
+
+void Play::resetDisplayGameOver(){
+    displayGameOver = false;
+}
+
+int Play::getStartTime(){return startTime;}
+
+void Play::setSpawnLocations(){
+    animalSpawnLocations.insert(std::pair<int, int>(1910, 2060));
+    animalSpawnLocations.insert(std::pair<int, int>(2230, 1937));
+    animalSpawnLocations.insert(std::pair<int, int>(1470, 1850));
+    animalSpawnLocations.insert(std::pair<int, int>(1150, 1680));
+    animalSpawnLocations.insert(std::pair<int, int>(2100, 1750));
+    animalSpawnLocations.insert(std::pair<int, int>(1440, 1490));
+    animalSpawnLocations.insert(std::pair<int, int>(2240, 1520));
+    animalSpawnLocations.insert(std::pair<int, int>(1910, 1350));
+    animalSpawnLocations.insert(std::pair<int, int>(2595, 1680));
+
+    setEnemiesSpawn();
+}
+
+void Play::setEnemiesSpawn(){
+    for(auto it = animalSpawnLocations.begin(); it != animalSpawnLocations.end(); it++) enemySpawnLocations.insert(std::pair<int, int>(it->first, it->second));
+}

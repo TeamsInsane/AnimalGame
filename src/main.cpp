@@ -2,6 +2,7 @@
 #include "Timers/Timer.h"
 
 int main(int argc, char* argv[]) {
+    srand(time(nullptr));
 
     Engine::getInstance()->init();
 

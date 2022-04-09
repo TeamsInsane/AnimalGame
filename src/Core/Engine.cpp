@@ -47,17 +47,31 @@ bool Engine::init(){
     }
 
     Menu::getInstance()->init(renderer);
-    Leaderboard::getInstance()->init(renderer);
     Replay::getInstance()->initReplay(renderer);
 
     level = 1;
+    delay = 0;
     initialized = false;
     running = true;
     return running;
 }
 
 void Engine::update(){
+    delay++;
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_F11) && delay > 100){
+        if (!fullscreen){
+            SDL_Log("Changed screen to fullscreen");
+            SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+            fullscreen = true;
+        } else {
+            SDL_Log("Changed screen to window");
+            SDL_SetWindowFullscreen(window, 0);
+            fullscreen = false;
+        }
+        delay = 0;
+    }
     if (Menu::getInstance()->getDisplayMenu()) Menu::getInstance()->update();
+    else if (Play::getInstance()->getDisplayGameOver()) Menu::getInstance()->resetMenu(renderer);
     else if (Menu::getInstance()->getDisplayGame()) Play::getInstance()->gameUpdate();
     else if (Menu::getInstance()->getDisplayDirections() || Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->checkMenu(renderer);
     else if (Menu::getInstance()->getDisplayReplay()) Replay::getInstance()->update();
@@ -70,6 +84,7 @@ void Engine::events() {
 void Engine::render(){
     SDL_RenderClear(renderer);
     if (Menu::getInstance()->getDisplayMenu()) Menu::getInstance()->draw(renderer);
+    else if (Play::getInstance()->getDisplayGameOver()) Play::getInstance()->gameOver();
     else if (Menu::getInstance()->getDisplayGame()){
         switch(level) {
             case 1:
@@ -98,13 +113,13 @@ void Engine::render(){
 }
 
 void Engine::clean(){
-        Play::getInstance()->gameClean();
-        TextureManager::getInstance()->cleanTexture();
-        MapParser::getInstance()->clean();
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        IMG_Quit();
-        SDL_Quit();
+    Play::getInstance()->gameClean();
+    TextureManager::getInstance()->cleanTexture();
+    MapParser::getInstance()->clean();
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    IMG_Quit();
+    SDL_Quit();
 }
 
 void Engine::quit(){

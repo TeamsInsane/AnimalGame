@@ -8,6 +8,7 @@
 #include "../Graphics/TextureManager.h"
 #include "Play.h"
 #include "../Replays/Replay.h"
+#include "../Leaderboards/Leaderboard.h"
 
 Menu *Menu::instance = nullptr;
 
@@ -117,6 +118,7 @@ void Menu::update() {
     }
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && position == 2) {
         displayLeaderboard = true;
+        Leaderboard::getInstance()->init(Engine::getInstance()->getRenderer());
         displayMenu = false;
     }
 
@@ -149,17 +151,12 @@ void Menu::checkMenu(SDL_Renderer *renderer){
     }
 }
 
-bool Menu::getDisplayGame() const{return displayGame;}
-
-bool Menu::getDisplayDirections() const {return displayDirections;}
-
-bool Menu::getDisplayLeaderboard() const {return displayLeaderboard;}
-
-bool Menu::getDisplayReplay() const {return displayReplay;}
-
-bool Menu::getDisplayMenu() const {return displayMenu;}
-
-void Menu::setDisplayLeaderboard(bool boolean) {displayLeaderboard = boolean; displayGame = false;}
+void Menu::resetMenu(SDL_Renderer *renderer){
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_ESCAPE)){
+        init(renderer);
+        Play::getInstance()->resetDisplayGameOver();
+    }
+}
 
 void Menu::loadDirections(SDL_Renderer *renderer) {
     SDL_Surface *surface = IMG_Load("../assets/menu/navodila.png");
@@ -169,3 +166,10 @@ void Menu::loadDirections(SDL_Renderer *renderer) {
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
 }
+
+bool Menu::getDisplayGame() const{return displayGame;}
+bool Menu::getDisplayDirections() const {return displayDirections;}
+bool Menu::getDisplayLeaderboard() const {return displayLeaderboard;}
+bool Menu::getDisplayReplay() const {return displayReplay;}
+bool Menu::getDisplayMenu() const {return displayMenu;}
+void Menu::resetDisplayGame() {displayGame = false;}

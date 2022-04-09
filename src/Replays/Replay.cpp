@@ -13,18 +13,14 @@
 Replay *Replay::instance = nullptr;
 
 Replay::Replay() {
-    std::ofstream data("Replay.bin", std::ios::binary);
-    data.close();
+    remove("Replay.bin");
+    initialized = false;
 }
 
 Replay *Replay::getInstance() {
     if (instance == nullptr) instance = new Replay;
     return instance;
 }
-
-struct Position{
-    float x, y;
-};
 
 void Replay::saveMovement(){
     std::ofstream data("Replay.bin", std::ios::app | std::ios::binary);
@@ -61,16 +57,22 @@ void Replay::displayMovement(){
     if (position.x != 0 && position.y != -10.0) {
         safeX = position.x;
         safeY = position.y;
-        char tempText[] = "Watching a replay!";
-        replayText.initCenter(renderer, 200, 50, tempText);
+        if (!initialized) {
+            char tempText[] = "Watching a replay!";
+            replayText.initCenter(renderer, 200, 50, tempText);
+            initialized = true;
+        }
     } else {
         player->setX(safeX);
         player->setY(safeY);
         player->setCollider(safeX, safeY, 96, 96);
         player->getOrigin()->x = safeX + 32 /2;
         player->getOrigin()->y = safeY + 32 /2;
-        char tempText[] = "Replay finished!";
-        replayText.initCenter(renderer, 200, 50, tempText);
+        if (initialized) {
+            char tempText[] = "Replay finished!";
+            replayText.initCenter(renderer, 200, 50, tempText);
+            initialized = false;
+        }
     }
 
     data.close();
@@ -106,6 +108,7 @@ void Replay::initReplay(SDL_Renderer *renderer){
     TextureManager::getInstance()->parseTextures("../assets/textures.tml");
 }
 
+
 void Replay::render(){
     for (int i = 0; i != parallaxBg.size(); i++) parallaxBg[i]->render();
     levelMap->render();
@@ -122,6 +125,12 @@ void Replay::update(){
     Camera::getInstance()->setTarget(player->getOrigin());
     Camera::getInstance()->update(dt);
     levelMap->update();
+}
+
+void Replay::clean(){
+    delete player;
+    delete levelMap;
+    parallaxBg.clear();
 }
 
 void Replay::resetReadCount(){readCount = 0;}

@@ -6,7 +6,7 @@
 
 #include "../Core/Engine.h"
 
-void Text::init(SDL_Renderer *renderer, int x, int y, const char *text) {
+void Text::init(SDL_Renderer *renderer, int x, int y, const char *text, bool subtract) {
 
     this->renderer = renderer;
 
@@ -21,7 +21,8 @@ void Text::init(SDL_Renderer *renderer, int x, int y, const char *text) {
     SDL_Surface *surfaceMessage = TTF_RenderText_Solid(font, text, color);
 
     message = SDL_CreateTextureFromSurface(this->renderer, surfaceMessage);
-    messageRect = {x, y, surfaceMessage->w - 150, surfaceMessage->h - 20};
+    if (subtract) messageRect = {x, y, surfaceMessage->w - 150, surfaceMessage->h - 20};
+    else messageRect = {x, y, surfaceMessage->w - 60, surfaceMessage->h - 20};
 
     SDL_FreeSurface(surfaceMessage);
     TTF_CloseFont(font);
