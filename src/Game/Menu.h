@@ -26,35 +26,24 @@ private:
     Text title, options[5], name;
     int position;
 public:
+    static Menu *getInstance();
+
     void init(SDL_Renderer *renderer);
     void draw(SDL_Renderer *renderer);
+    void update();
+    void checkMenu(SDL_Renderer *renderer);
+    void loadDirections(SDL_Renderer *renderer);
 
     void moveDown();
     void moveUp();
-    int getPosition();
-
-    static Menu *getInstance();
-    void update();
-
-    bool getDisplayGame() const;
-
-    void checkMenu(SDL_Renderer *renderer);
 
     bool getDisplayDirections() const;
-
-    void loadDirections(SDL_Renderer *renderer);
-
     bool getDisplayLeaderboard() const;
     bool getDisplayReplay() const;
-
-    void setDisplayLeaderboard(bool boolean);
-
+    bool getDisplayGame() const;
     bool getDisplayMenu() const;
 
-    bool getDisplayGameOver() const;
-
     void resetMenu(SDL_Renderer *renderer);
-
     void resetDisplayGame();
 };
 

@@ -17,6 +17,7 @@ Enemy::Enemy(Properties *properties) : Character(properties) {
     collider->setBuffer(0, 0, 110, 65);
 
     moveCount = 0;
+    moveLeft = false;
 }
 
 void Enemy::draw() {

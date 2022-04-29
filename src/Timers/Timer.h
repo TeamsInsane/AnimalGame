@@ -14,7 +14,8 @@ const float TARGET_DELTATIME = 0.50f;
 class Timer {
 private:
     static Timer* instance;
-    float deltaTime, lastTime;
+    float deltaTime;
+    unsigned int lastTime;
     Text time;
 public:
     static Timer* getInstance();

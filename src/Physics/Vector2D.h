@@ -16,7 +16,6 @@ public:
     Vector2D operator+(const Vector2D &v2) const {return Vector2D(x + v2.x, y + v2.y);}
     Vector2D operator-(const Vector2D &v2) const {return Vector2D(x - v2.x, y - v2.y);}
     Vector2D operator*(const float scalar) const {return Vector2D(x*scalar, y*scalar);}
-    void log(const std::string& message = "") const { SDL_Log("%s (x y) = (%f %f)", message.c_str(), x, y);}
 };
 
 #endif //ANIMALGAME_VECTOR2D_H

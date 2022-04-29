@@ -37,7 +37,7 @@ void Leaderboard::updateMap(){
     data.close();
 }
 
-void Leaderboard::addToFile(std::string name, int score){
+void Leaderboard::addToFile(const std::string& name, int score){
     bool found = false;
     updateMap();
     for(auto it = map.begin(); it != map.end(); it++)
@@ -62,16 +62,16 @@ void Leaderboard::addToFile(std::string name, int score){
     data.close();
 }
 
-void Leaderboard::init(SDL_Renderer *renderer){
-    this->renderer = renderer;
+void Leaderboard::init(SDL_Renderer *sdlRenderer){
+    this->renderer = sdlRenderer;
     SDL_Surface *surface = IMG_Load("../assets/images/PepaPig.png");
-    background = SDL_CreateTextureFromSurface(renderer, surface);
+    background = SDL_CreateTextureFromSurface(sdlRenderer, surface);
     bgRect = {0, 0, 1920, 1080};
     SDL_FreeSurface(surface);
     char tempText[51];
     strcpy(tempText, "Lestvica najboljsih igralcev:");
     int y = 200;
-    leaderboard[0].initCenter(renderer, 40, 30, tempText);
+    leaderboard[0].initCenter(sdlRenderer, 40, 30, tempText);
     leaderboardCount = 1;
 
     std::ifstream data("Leaderboard.txt");
@@ -89,7 +89,7 @@ void Leaderboard::init(SDL_Renderer *renderer){
         strcat(tempText, name.c_str());
         strcat(tempText, " - ");
         strcat(tempText, std::to_string(score).c_str());
-        leaderboard[leaderboardCount].initCenter(renderer, y, 30, tempText);
+        leaderboard[leaderboardCount].initCenter(sdlRenderer, y, 30, tempText);
         leaderboardCount++;
         y+=100;
         if (leaderboardCount >= 6) break;

@@ -37,10 +37,9 @@ public:
 
     inline bool isRunning() const{return running;}
     inline SDL_Renderer *getRenderer() const{return renderer;}
-    inline SDL_Window *getWindow() const{return window;}
 
     void setLevel(int num);
-    void setInitialized();
+    int getLevel() const {return level;}
 };
 
 

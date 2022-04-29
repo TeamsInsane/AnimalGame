@@ -16,7 +16,7 @@ void Menu::init(SDL_Renderer *renderer) {
 
     position = 0;
 
-    bgRect = {0, 0, 1920, 1080};
+    bgRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     SDL_Surface *surface = IMG_Load("../assets/images/menuBackground.png");
     background = SDL_CreateTextureFromSurface(renderer, surface);
@@ -81,10 +81,6 @@ void Menu::moveUp() {
         position = 4;
         arrowRect.y = SCREEN_HEIGHT / 2 + 300;
     }
-}
-
-int Menu::getPosition() {
-    return position;
 }
 
 Menu *Menu::getInstance() {

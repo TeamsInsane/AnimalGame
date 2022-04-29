@@ -16,14 +16,16 @@ private:
     std::map<std::string, SDL_Texture*> textureMap;
 public:
     static TextureManager *getInstance();
-    SDL_Texture *getTexture(std::string id) {return textureMap[id];}
-    bool parseTextures(std::string source);
-    bool loadTexture(std::string id, std::string filename);
-    void dropTexture(std::string id);
+
+    bool parseTextures(const std::string& source);
+    bool loadTexture(const std::string& id, const std::string& filename);
+    void dropTexture(const std::string& id);
+
     void cleanTexture();
-    void drawTexture(std::string id, int x, int y, int width, int height, float scaleX = 1, float scaleY = 1, float scrollRatio = 0, SDL_RendererFlip flip= SDL_FLIP_NONE);
-    void drawFrame(std::string id, int x, int y, int width, int height, int row, int frame, SDL_RendererFlip flip = SDL_FLIP_NONE);
-    void drawTile(std::string tileSetID, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip = SDL_FLIP_NONE);
+
+    void drawTexture(const std::string& id, int x, int y, int width, int height, float scaleX = 1, float scaleY = 1, float scrollRatio = 0, SDL_RendererFlip flip= SDL_FLIP_NONE);
+    void drawFrame(const std::string& id, int x, int y, int width, int height, int row, int frame, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void drawTile(const std::string& tileSetID, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip = SDL_FLIP_NONE);
 };
 
 #endif //ANIMALGAME_TEXTUREMANAGER_H

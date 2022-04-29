@@ -28,8 +28,8 @@ public:
 
     void drawBox(){
         Vector2D cam = Camera::getInstance()->getPosition();
-        SDL_Rect box = {this->box.x - (int) cam.x, this->box.y - (int)  cam.y, this->box.w, this->box.h};
-        SDL_RenderDrawRect(Engine::getInstance()->getRenderer(), &box);
+        SDL_Rect hitBox = {this->box.x - (int) cam.x, this->box.y - (int)  cam.y, this->box.w, this->box.h};
+        SDL_RenderDrawRect(Engine::getInstance()->getRenderer(), &hitBox);
     }
 };
 

@@ -27,8 +27,6 @@ private:
     bool isGrounded;
     bool isFalling;
     bool isRunning;
-    bool isAttacking;
-    bool isCrouching;
     bool isSpawned;
     bool isHurt;
 
@@ -37,12 +35,11 @@ private:
 
     float jumpTime;
     float jumpForce;
-    float attackTime;
 public:
     Warrior(Properties* properties);
-    virtual void draw();
-    virtual void clean();
-    virtual void update(float dt);
+    void draw();
+    void clean();
+    void update(float dt);
     void animationState();
 
     bool getIsJumpingOrFalling() const{ return isJumping || isFalling;}

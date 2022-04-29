@@ -10,7 +10,6 @@ ImgLayer::ImgLayer(std::string textureID, int x, int y, int width, int height, f
     this->offsetX = x;
     this->offsetY = y;
     this->scrollRatio = scrollRatio;
-    repeated = true;
     this-> scaleX = scaleX;
     this->scaleY = scaleY;
     this->imgWidth = width;

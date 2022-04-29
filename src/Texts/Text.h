@@ -20,8 +20,6 @@ public:
     void initCenter(SDL_Renderer *renderer, int y, int size, char text[]);
 
     void draw();
-    void changeText(char text[]);
-    void changeTextCenter(char text[]);
 };
 
 

@@ -9,6 +9,7 @@
     <texture id="player_hurt" source="../assets/player/player_hurt.png"/>
 
     <texture id="bg" source="../assets/images/Background.jpg"/>
+    <texture id="victory" source="../assets/images/victory.png"/>
     <texture id="menuBG" source="../assets/images/menuBackground.png"/>
     <texture id="navodila" source="../assets/menu/navodila.png"/>
 

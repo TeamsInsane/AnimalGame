@@ -25,9 +25,7 @@ Animals::Animals(Properties *properties) : Character(properties) {
     if (textureID == "rat") collider->setBuffer(0, -22, 116, 90);
     else if (textureID == "bird") collider->setBuffer(0, -15, 122, 82);
     else if (textureID == "chicken") collider->setBuffer(0, 1, 110, 70);
-    else if (textureID == "hyena") collider->setBuffer(-9, -13, 100, 65);
-    else if (textureID == "snake") collider->setBuffer(-9, -13, 100, 65);
-    else if (textureID == "scorpion") collider->setBuffer(-9, -13, 100, 65);
+    else if (textureID == "snake" || textureID == "hyena" || textureID == "scorpion") collider->setBuffer(-9, -13, 100, 65);
 }
 
 void Animals::draw() {

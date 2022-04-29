@@ -38,10 +38,6 @@ public:
     Point operator*(const float scalar) const {
         return Point(x * scalar, y * scalar);
     }
-
-    void log(std::string message = ""){
-        SDL_Log("%s(x y) = (%f %f)", message.c_str(), x, y);
-    }
 };
 
 

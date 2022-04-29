@@ -29,12 +29,12 @@ private:
 public:
     void clean();
 
-    void playMusic(std::string id);
-    void loadMusic(std::string id, std::string source);
+    void playMusic(const std::string& id);
+    void loadMusic(const std::string& id, const std::string& source);
 
-    void playEffect(std::string id);
-    void loadEffect(std::string id, std::string source);
-    bool parseSounds(std::string source);
+    void playEffect(const std::string& id);
+    void loadEffect(const std::string& id, const std::string& source);
+    bool parseSounds(const std::string& source);
 
     static SoundManager *getInstance();
     bool getMusicSetting() const{return music;}

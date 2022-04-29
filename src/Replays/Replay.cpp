@@ -54,10 +54,12 @@ void Replay::displayMovement(){
 
     data.seekg(sizeof(Position) * readCount, std::ios::beg);
     data.read((char *) &position, sizeof (position));
+
     if (position.x != 0 && position.y != -10.0) {
         safeX = position.x;
         safeY = position.y;
         if (!initialized) {
+            SDL_Log("TEMPTEXT -> WATCHING REPLAY");
             char tempText[] = "Watching a replay!";
             replayText.initCenter(renderer, 200, 50, tempText);
             initialized = true;
@@ -69,6 +71,7 @@ void Replay::displayMovement(){
         player->getOrigin()->x = safeX + 32 /2;
         player->getOrigin()->y = safeY + 32 /2;
         if (initialized) {
+            SDL_Log("TEMPTEXT -> REPLAY FINISHED");
             char tempText[] = "Replay finished!";
             replayText.initCenter(renderer, 200, 50, tempText);
             initialized = false;
@@ -80,6 +83,9 @@ void Replay::displayMovement(){
 
 void Replay::initReplay(SDL_Renderer *renderer){
     readCount = 0;
+
+    char tempText[] = "Replay finished!";
+    replayText.initCenter(renderer, 200, 50, tempText);
 
     this->renderer = renderer;
     player = new Warrior(new Properties("player", 1500, 1800, 32, 32 ));
@@ -123,7 +129,7 @@ void Replay::update(){
     player->setAnimationSate(dt);
     SoundManager::getInstance()->update(player);
     Camera::getInstance()->setTarget(player->getOrigin());
-    Camera::getInstance()->update(dt);
+    Camera::getInstance()->update();
     levelMap->update();
 }
 

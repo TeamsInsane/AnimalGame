@@ -27,15 +27,17 @@ private:
     int index;
     int delay;
     bool initialized;
-    int enemySize;
     int startTime;
+    int safeX1, safeX2, safeY;
     SDL_Texture *heartTexture;
     SDL_Renderer *renderer;
     SDL_Texture *background;
-    SDL_Rect bgRect;
+    SDL_Texture *victoryScreen;
+    SDL_Rect bgRect, victoryRect;
     Text gameOverText;
     std::multimap<int, int> animalSpawnLocations, enemySpawnLocations;
     bool displayGameOver;
+    bool displayVictory;
 public:
     static Play *getInstance();
 
@@ -51,8 +53,6 @@ public:
 
     std::string getPlayerNameForMenu();
 
-    void gameOver();
-
     float getPlayerPositionX();
 
     float getPlayerPositionY();
@@ -61,13 +61,19 @@ public:
 
     void resetDisplayGameOver();
 
-    void setSpawnLocations();
+    void setSpawnLocations1();
 
     Enemy * renderEnemy();
 
     void setEnemiesSpawn();
 
     int getStartTime();
+
+    void setSpawnLocations2();
+
+    bool getDisplayVictory();
+
+    void endScreen(bool won);
 };
 
 

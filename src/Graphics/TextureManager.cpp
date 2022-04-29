@@ -14,7 +14,7 @@ TextureManager *TextureManager::getInstance() {
     return instance;
 }
 
-bool TextureManager::loadTexture(std::string id, std::string fileName){
+bool TextureManager::loadTexture(const std::string& id, const std::string& fileName){
     SDL_Surface* surface = IMG_Load(fileName.c_str());
     if(surface == nullptr){
         SDL_Log("Failed to loadTexture texture: %s, %s", fileName.c_str(), SDL_GetError());
@@ -32,26 +32,26 @@ bool TextureManager::loadTexture(std::string id, std::string fileName){
     return true;
 }
 
-void TextureManager::dropTexture(std::string id) {
+void TextureManager::dropTexture(const std::string& id) {
     SDL_DestroyTexture(textureMap[id]);
     textureMap.erase(id);
 }
 
-void TextureManager::drawTexture(std::string id, int x, int y, int width, int height, float scaleX, float scaleY, float scrollRatio, SDL_RendererFlip flip){
+void TextureManager::drawTexture(const std::string& id, int x, int y, int width, int height, float scaleX, float scaleY, float scrollRatio, SDL_RendererFlip flip){
     SDL_Rect srcRect = {0, 0, width, height};
     Vector2D cam = Camera::getInstance()->getPosition()*scrollRatio;
     SDL_Rect dstRect ={x - (int) cam.x, y - (int) cam.y, (int) (width*scaleX),(int) (height*scaleY)};
     SDL_RenderCopyEx(Engine::getInstance()->getRenderer(), textureMap[id], &srcRect, &dstRect, 0, nullptr, flip);
 }
 
-void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int row, int frame, SDL_RendererFlip flip){
+void TextureManager::drawFrame(const std::string& id, int x, int y, int width, int height, int row, int frame, SDL_RendererFlip flip){
     SDL_Rect srcRect = {width*frame, height*(row-1), width, height};
     Vector2D cam = Camera::getInstance()->getPosition();
     SDL_Rect dstRect ={x - (int) cam.x, y - (int) cam.y, width, height};
     SDL_RenderCopyEx(Engine::getInstance()->getRenderer(), textureMap[id], &srcRect, &dstRect, 0, nullptr, flip);
 }
 
-void TextureManager::drawTile(std::string tileSetID, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip) {
+void TextureManager::drawTile(const std::string& tileSetID, int tileSize, int x, int y, int row, int frame, SDL_RendererFlip flip) {
     SDL_Rect srcRect = {tileSize*frame, tileSize*row, tileSize, tileSize};
     Vector2D cam = Camera::getInstance()->getPosition();
     SDL_Rect dstRect = {x - (int) cam.x, y - (int) cam.y, tileSize, tileSize};
@@ -66,7 +66,7 @@ void TextureManager::cleanTexture() {
     SDL_Log("Texture map cleaned!");
 }
 
-bool TextureManager::parseTextures(std::string source) {
+bool TextureManager::parseTextures(const std::string& source) {
     TiXmlDocument xmlDocument;
     xmlDocument.LoadFile(source);
     if (xmlDocument.Error()){

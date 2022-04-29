@@ -21,15 +21,8 @@ private:
     SDL_Rect viewBox;
 public:
     static Camera *getInstance();
-    void update(float dt);
+    void update();
 
-    int getSceneWidth() const {return sceneWidth;}
-    int getSceneHeight() const {return sceneHeight;}
-
-    void moveX(float x){position.x = x;}
-    void moveY(float y){position.y = y;}
-
-    SDL_Rect getViewBox() {return viewBox;}
     Vector2D getPosition() {return position;}
     void setTarget(Point *target){ this->target = target;}
     void setSceneLimit(int w, int h){sceneWidth = w, sceneHeight = h;}

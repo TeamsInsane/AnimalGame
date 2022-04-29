@@ -11,7 +11,7 @@ Camera *Camera::getInstance() {
     return instance;
 }
 
-void Camera::update(float dt) {
+void Camera::update() {
 
     if (target != nullptr){
 

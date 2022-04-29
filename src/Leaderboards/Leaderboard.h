@@ -23,8 +23,8 @@ public:
     static Leaderboard *getInstance();
 
     void updateMap();
-    void addToFile(std::string name, int score);
-    void init(SDL_Renderer *renderer);
+    void addToFile(const std::string& name, int score);
+    void init(SDL_Renderer *sdlRenderer);
 
     void draw();
 };

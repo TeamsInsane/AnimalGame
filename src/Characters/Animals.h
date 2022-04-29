@@ -19,9 +19,9 @@ private:
 public:
     Animals(Properties *properties);
 
-    virtual void draw();
-    virtual void clean();
-    virtual void update(float dt);
+    void draw();
+    void clean();
+    void update(float dt);
 
     SDL_Rect getBox();
 

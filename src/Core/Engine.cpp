@@ -32,7 +32,7 @@ bool Engine::init(){
         return false;
     }
 
-    SDL_WindowFlags flags = (SDL_WindowFlags) (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    auto flags = (SDL_WindowFlags) (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
     window = SDL_CreateWindow("Minecraft 2.0", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
     if(window == nullptr){
@@ -71,7 +71,7 @@ void Engine::update(){
         delay = 0;
     }
     if (Menu::getInstance()->getDisplayMenu()) Menu::getInstance()->update();
-    else if (Play::getInstance()->getDisplayGameOver()) Menu::getInstance()->resetMenu(renderer);
+    else if (Play::getInstance()->getDisplayGameOver() || Play::getInstance()->getDisplayVictory()) Menu::getInstance()->resetMenu(renderer);
     else if (Menu::getInstance()->getDisplayGame()) Play::getInstance()->gameUpdate();
     else if (Menu::getInstance()->getDisplayDirections() || Menu::getInstance()->getDisplayLeaderboard()) Menu::getInstance()->checkMenu(renderer);
     else if (Menu::getInstance()->getDisplayReplay()) Replay::getInstance()->update();
@@ -84,7 +84,8 @@ void Engine::events() {
 void Engine::render(){
     SDL_RenderClear(renderer);
     if (Menu::getInstance()->getDisplayMenu()) Menu::getInstance()->draw(renderer);
-    else if (Play::getInstance()->getDisplayGameOver()) Play::getInstance()->gameOver();
+    else if (Play::getInstance()->getDisplayGameOver()) Play::getInstance()->endScreen(false);
+    else if (Play::getInstance()->getDisplayVictory()) Play::getInstance()->endScreen(true);
     else if (Menu::getInstance()->getDisplayGame()){
         switch(level) {
             case 1:
@@ -130,5 +131,3 @@ void Engine::setLevel(int num){
     initialized = false;
     level = num;
 }
-
-void Engine::setInitialized(){initialized = !initialized;}

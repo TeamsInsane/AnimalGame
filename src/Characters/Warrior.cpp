@@ -12,10 +12,13 @@
 
 Warrior::Warrior(Properties* properties): Character(properties) {
     isSpawned = false;
+    isFalling = false;
+    isJumping = false;
+    isRunning = false;
     isGrounded = false;
+    isHurt = false;
     jumpTime = JUMP_TIME;
     jumpForce = JUMP_FORCE;
-    attackTime = ATTACK_TIME;
 
     collider = new Collider();
     collider->setBuffer(-10, 4, 78, 60);
@@ -46,33 +49,20 @@ void Warrior::update(float dt) {
         rigidBody->setGravity(GRAVITY);
     }
     isRunning = false;
-    isCrouching = false;
     rigidBody->unSetForce();
 
     //Run forward
-    if (Input::getInstance()->getAxisKey(HORIZONTAL) == FORWARD && !isAttacking){
+    if (Input::getInstance()->getAxisKey(HORIZONTAL) == FORWARD){
         rigidBody->applyForceX(FORWARD*RUN_FORCE);
         flip = SDL_FLIP_NONE;
         isRunning = true;
     }
 
     //Run backward
-    if (Input::getInstance()->getAxisKey(HORIZONTAL) == BACKWARD && !isAttacking){
+    if (Input::getInstance()->getAxisKey(HORIZONTAL) == BACKWARD){
         rigidBody->applyForceX(BACKWARD*RUN_FORCE);
         flip = SDL_FLIP_HORIZONTAL;
         isRunning = true;
-    }
-
-    //Crouch
-    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_S)){
-        rigidBody->unSetForce();
-        isCrouching = true;
-    }
-
-    //Attack
-    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_F)){
-        rigidBody->unSetForce();
-        isAttacking = true;
     }
 
     //Jump
@@ -91,13 +81,6 @@ void Warrior::update(float dt) {
     //Fall
     if (rigidBody->getVelocity().y > 0 && !isGrounded) isFalling = true;
     else isFalling = false;
-
-    //Attack timer
-    if (isAttacking && attackTime > 0) attackTime -= dt;
-    else {
-        isAttacking = false;
-        attackTime = ATTACK_TIME;
-    }
 
     //Move on X axis
     rigidBody->update(dt);
@@ -132,17 +115,11 @@ void Warrior::animationState() {
     //Running
     if (isRunning) animation->setProperties("player_run", 1, 6, 100);
 
-    //Crouching
-    if (isCrouching) animation->setProperties("player_crouch", 1, 4, 100);
-
     //Jumping
     if (isJumping) animation->setProperties("player_jump", 1, 4, 100);
 
     //Falling
     if (isFalling) animation->setProperties("player_fall", 1, 4, 100);
-
-    //Attacking
-    if (isAttacking) animation->setProperties("player_attack", 1, 6, 100);
 
     //Hurt
     if (isHurt) animation->setProperties("player_hurt", 1, 4, 100);

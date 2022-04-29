@@ -23,7 +23,7 @@ void Timer::tick(){
 }
 
 void Timer::displayTime() {
-    int seconds = SDL_GetTicks()/1000 - Play::getInstance()->getStartTime();
+    unsigned int seconds = SDL_GetTicks()/1000 - Play::getInstance()->getStartTime();
     int minutes = 0;
     while (seconds >= 60){
         minutes++;
