@@ -38,7 +38,10 @@ public:
 
     static SoundManager *getInstance();
     bool getMusicSetting() const{return music;}
-    void update(Warrior *player);
+    void update();
+
+    void turnOffMusic();
+    void turnOnMusic();
 };
 
 

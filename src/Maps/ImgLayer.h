@@ -19,9 +19,8 @@ private:
 public:
     ImgLayer(std::string textureID, int x, int y, int width, int height, float scrollRatio = 1.0f, float scaleX = 1.0f, float scaleY = 1.0f);
 
-    virtual void render();
-    virtual void update();
+    void render() override;
+    void update() override;
 };
-
 
 #endif //ANIMALGAME_IMGLAYER_H

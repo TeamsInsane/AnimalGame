@@ -28,8 +28,8 @@ private:
     TileSetList tileSetList;
 public:
     TileLayer(int tileSize, int rowCount, int colCount, TileMap tileMap, TileSetList tileSetList);
-    virtual void render();
-    virtual void update();
+    void render() override;
+    void update() override;
     TileMap getTileMap() {return tileMap;}
 
     int getWidth() const {return colCount;}

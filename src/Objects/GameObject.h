@@ -5,6 +5,8 @@
 #ifndef ANIMALGAME_GAMEOBJECT_H
 #define ANIMALGAME_GAMEOBJECT_H
 
+#include <utility>
+
 #include "../Physics/Transform.h"
 #include "../Physics/Point.h"
 #include "SDL.h"
@@ -17,7 +19,7 @@ public:
         this->flip = flip;
         this->width = width;
         this->height = height;
-        this->textureID = textureID;
+        this->textureID = std::move(textureID);
     }
 
     std::string textureID;

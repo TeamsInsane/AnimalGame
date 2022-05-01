@@ -14,7 +14,6 @@
 #define JUMP_TIME 15.0f
 #define JUMP_FORCE 40.0f
 #define RUN_FORCE 10.0f
-#define ATTACK_TIME 20.0f
 
 class Warrior: public Character{
 private:
@@ -37,12 +36,10 @@ private:
     float jumpForce;
 public:
     Warrior(Properties* properties);
-    void draw();
-    void clean();
-    void update(float dt);
+    void draw() override;
+    void clean() override;
+    void update(float dt) override;
     void animationState();
-
-    bool getIsJumpingOrFalling() const{ return isJumping || isFalling;}
 
     SDL_Rect getBox();
     int getHealth() const;
@@ -52,11 +49,8 @@ public:
 
     void setY(float y);
     void setX(float x);
-
     void setCollider(int x, int y, int w, int h);
-
     void setAnimationSate(float dt);
-
     void setIsHurt();
 
     void resetIsHurt();

@@ -23,7 +23,7 @@ Enemy::Enemy(Properties *properties) : Character(properties) {
 void Enemy::draw() {
     animation->draw(transform->x, transform->y, width,height, 1, 1, flip);
 
-    collider->drawBox();
+    //collider->drawBox();
 }
 
 void Enemy::clean() {
@@ -63,6 +63,27 @@ void Enemy::update(float dt) {
     }
 }
 
-SDL_Rect Enemy::getBox(){
+SDL_Rect Enemy::getBox() const{
     return collider->getBox();
+}
+
+int Enemy::getMoveCount() const{
+    return moveCount;
+}
+
+bool Enemy::getMoveLeft() const{
+    return moveLeft;
+}
+
+void Enemy::setX(float x){
+    transform->x = x;
+}
+
+void Enemy::setY(float y){
+    transform->y = y;
+}
+
+void Enemy::setMove(int num, bool left){
+    moveCount = num;
+    moveLeft = left;
 }

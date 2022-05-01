@@ -19,9 +19,9 @@ private:
 public:
     Animals(Properties *properties);
 
-    void draw();
-    void clean();
-    void update(float dt);
+    void draw() override;
+    void clean() override;
+    void update(float dt) override;
 
     SDL_Rect getBox();
 

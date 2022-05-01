@@ -40,6 +40,10 @@ public:
 
     void setLevel(int num);
     int getLevel() const {return level;}
+
+    void changeInitialized(bool temp);
+
+    bool getInitialized() const;
 };
 
 

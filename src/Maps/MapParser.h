@@ -17,15 +17,14 @@ class MapParser {
 private:
     static MapParser *instance;
     std::map<std::string, GameMap*> mapDict;
-    MapParser();
-    bool parse(std::string id, std::string source);
+    bool parse(const std::string& id, const std::string& source);
     TileSet parseTileSet(TiXmlElement *xmlTileSet);
     TileLayer* parseTileLayer(TiXmlElement *xmlLayer, TileSetList tileSets, int tileSize, int rowCount, int colCount);
 public:
     static MapParser *getInstance();
-    bool load(std::string id, std::string source);
+    bool load(const std::string& id, const std::string& source);
     void clean();
-    GameMap *getMaps(std::string id) {return mapDict[id];}
+    GameMap *getMaps(const std::string& id) {return mapDict[id];}
 };
 
 

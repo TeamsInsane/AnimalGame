@@ -16,8 +16,8 @@ private:
     SDL_Color color;
     SDL_Rect messageRect;
 public:
-    void init(SDL_Renderer *renderer, int x, int y, const char text[], bool subtract = true);
-    void initCenter(SDL_Renderer *renderer, int y, int size, char text[]);
+    void init(SDL_Renderer *sdlRenderer, int x, int y, const char text[], bool subtract = true);
+    void initCenter(SDL_Renderer *sdlRenderer, int y, int size, char text[]);
 
     void draw();
 };

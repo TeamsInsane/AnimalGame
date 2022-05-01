@@ -7,6 +7,7 @@
 
 #include "../Texts/Text.h"
 #include <SDL.h>
+#include <string>
 
 class Menu {
 private:
@@ -20,10 +21,11 @@ private:
     bool displayLeaderboard;
     bool displayMenu;
     bool displayReplay;
+    std::string playerName;
 
     int delayCount;
 
-    Text title, options[5], name;
+    Text title, options[7], name;
     int position;
 public:
     static Menu *getInstance();
@@ -45,6 +47,8 @@ public:
 
     void resetMenu(SDL_Renderer *renderer);
     void resetDisplayGame();
+
+    std::string getName();
 };
 
 

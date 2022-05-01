@@ -47,7 +47,6 @@ bool Engine::init(){
     }
 
     Menu::getInstance()->init(renderer);
-    Replay::getInstance()->initReplay(renderer);
 
     level = 1;
     delay = 0;
@@ -131,3 +130,7 @@ void Engine::setLevel(int num){
     initialized = false;
     level = num;
 }
+
+void Engine::changeInitialized(bool temp){initialized = temp;}
+
+bool Engine::getInitialized() const{return initialized;}

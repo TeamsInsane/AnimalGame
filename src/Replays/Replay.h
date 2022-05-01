@@ -20,26 +20,23 @@ private:
     std::vector<ImgLayer*> parallaxBg;
     float safeX, safeY;
     SDL_Renderer *renderer;
-    int readCount;
+    unsigned int readCount;
     Text replayText;
     int initialized;
+    int lvl;
 public:
-    Replay();
-
     static Replay *getInstance();
 
     void saveMovement();
     void displayMovement();
 
-    void initReplay(SDL_Renderer *renderer);
+    void initReplay(SDL_Renderer *sdlRenderer);
 
     void render();
-
     void update();
+    void clean();
 
     void resetReadCount();
-
-    void clean();
 };
 
 

@@ -3,10 +3,12 @@
 //
 
 #include "ImgLayer.h"
+
+#include <utility>
 #include "../Graphics/TextureManager.h"
 
 ImgLayer::ImgLayer(std::string textureID, int x, int y, int width, int height, float scrollRatio, float scaleX, float scaleY) {
-    this->textureID = textureID;
+    this->textureID = std::move(textureID);
     this->offsetX = x;
     this->offsetY = y;
     this->scrollRatio = scrollRatio;

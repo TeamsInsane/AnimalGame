@@ -9,7 +9,6 @@ SoundManager *SoundManager::instance = nullptr;
 
 SoundManager::SoundManager() {
     if (Mix_OpenAudio(FREQ, MIX_DEFAULT_FORMAT, 2, CHUNK_SIZE) < 0) SDL_Log("Error: %s", Mix_GetError());
-
 }
 
 SoundManager *SoundManager::getInstance() {
@@ -74,19 +73,20 @@ bool SoundManager::parseSounds(const std::string& source) {
     return true;
 }
 
-void SoundManager::update(Warrior *player) {
-    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_M)){
-        music = false;
-        SDL_Log("Music was turned off!");
-    }
-    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_N)){
-        music = true;
-        SDL_Log("Music was turned on!");
-    }
+void SoundManager::update() {
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_M)) turnOffMusic();
+    if (Input::getInstance()->getKeyDown(SDL_SCANCODE_N)) turnOnMusic();
 
-    if (!getMusicSetting() && Mix_PlayingMusic()) Mix_PauseMusic();
-
-    if (player->getIsJumpingOrFalling() && getMusicSetting()) Mix_ResumeMusic();
+    if (getMusicSetting()) Mix_ResumeMusic();
     else Mix_PauseMusic();
 }
 
+void SoundManager::turnOffMusic(){
+    SDL_Log("Music was turned off");
+    music = false;
+}
+
+void SoundManager::turnOnMusic() {
+    SDL_Log("Music was turned on");
+    music = true;
+}

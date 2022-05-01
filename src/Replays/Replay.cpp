@@ -12,11 +12,6 @@
 
 Replay *Replay::instance = nullptr;
 
-Replay::Replay() {
-    remove("Replay.bin");
-    initialized = false;
-}
-
 Replay *Replay::getInstance() {
     if (instance == nullptr) instance = new Replay;
     return instance;
@@ -24,7 +19,7 @@ Replay *Replay::getInstance() {
 
 void Replay::saveMovement(){
     std::ofstream data("Replay.bin", std::ios::app | std::ios::binary);
-    Position position;
+    Position position = Position();
     position.x = Play::getInstance()->getPlayerPositionX();
     position.y = Play::getInstance()->getPlayerPositionY();
     data.write((char *) &position, sizeof(position));
@@ -32,6 +27,7 @@ void Replay::saveMovement(){
 }
 
 void Replay::displayMovement(){
+
     std::ifstream data("Replay.bin", std::ios::binary);
     if (!data.is_open()){
         SDL_Log("Couldn't open or find the data!");
@@ -39,7 +35,7 @@ void Replay::displayMovement(){
     }
 
     data.seekg(sizeof(Position) * readCount, std::ios::beg);
-    struct Position position;
+    struct Position position = Position();
 
     data.read((char *) &position, sizeof (position));
     readCount++;
@@ -81,13 +77,13 @@ void Replay::displayMovement(){
     data.close();
 }
 
-void Replay::initReplay(SDL_Renderer *renderer){
+void Replay::initReplay(SDL_Renderer *sdlRenderer){
     readCount = 0;
 
     char tempText[] = "Replay finished!";
-    replayText.initCenter(renderer, 200, 50, tempText);
+    replayText.initCenter(sdlRenderer, 200, 50, tempText);
 
-    this->renderer = renderer;
+    this->renderer = sdlRenderer;
     player = new Warrior(new Properties("player", 1500, 1800, 32, 32 ));
 
     if (!MapParser::getInstance()->load("replay1", "../assets/maps/level1.tmx")){
@@ -95,13 +91,24 @@ void Replay::initReplay(SDL_Renderer *renderer){
         exit(EXIT_FAILURE);
     }
 
-    levelMap = MapParser::getInstance()->getMaps("replay1");
+    if (!MapParser::getInstance()->load("replay2", "../assets/maps/level2.tmx")){
+        SDL_Log("Failed to load map: %s", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+    std::ifstream data("Replay.txt");
+    data >> lvl;
+    data.close();
+
+    if (lvl == 1) levelMap = MapParser::getInstance()->getMaps("replay1");
+    else levelMap = MapParser::getInstance()->getMaps("replay2");
 
 
     TileLayer *collisionLayer = (TileLayer*) levelMap->getMapLayers().back();
 
-
-    parallaxBg.push_back(new ImgLayer("bg", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0.2, 2, 2));
+    parallaxBg.push_back(new ImgLayer("bg", 0, 0, 3840, 2160, 0.2, 1, 1));
+    parallaxBg.push_back(new ImgLayer("cloud", 500, 800, 784, 253, 0.5, 0.7, 0.7));
+    parallaxBg.push_back(new ImgLayer("cloud", 1700, 650, 784, 253, 0.5, 0.7, 0.7));
 
     int tileSize = collisionLayer->getTileSize();
     int width = collisionLayer->getWidth()*tileSize;
@@ -127,7 +134,7 @@ void Replay::update(){
     float dt = Timer::getInstance()->getDeltaTime();
     displayMovement();
     player->setAnimationSate(dt);
-    SoundManager::getInstance()->update(player);
+    SoundManager::getInstance()->update();
     Camera::getInstance()->setTarget(player->getOrigin());
     Camera::getInstance()->update();
     levelMap->update();

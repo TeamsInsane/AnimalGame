@@ -24,7 +24,7 @@ public:
     void update();
 
     Vector2D getPosition() {return position;}
-    void setTarget(Point *target){ this->target = target;}
+    void setTarget(Point *tempTarget){ target = tempTarget;}
     void setSceneLimit(int w, int h){sceneWidth = w, sceneHeight = h;}
 };
 

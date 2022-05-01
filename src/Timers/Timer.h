@@ -23,6 +23,7 @@ public:
     float getDeltaTime() const;
 
     void displayTime();
+    int getCurrentTime();
 };
 
 

@@ -5,10 +5,6 @@
 #include "SpriteAnimation.h"
 #include "../Graphics/TextureManager.h"
 
-SpriteAnimation::SpriteAnimation(){
-
-}
-
 void SpriteAnimation::update(float dt) {
     currentFrame = (SDL_GetTicks() / animationSpeed) % frameCount;
 }

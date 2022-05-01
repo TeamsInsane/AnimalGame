@@ -22,11 +22,17 @@ private:
 public:
     Enemy(Properties *properties);
 
-    virtual void draw();
-    virtual void clean();
-    virtual void update(float dt);
+    void draw() override;
+    void clean() override;
+    void update(float dt) override;
 
-    SDL_Rect getBox();
+    SDL_Rect getBox() const;
+    bool getMoveLeft() const;
+    int getMoveCount() const;
+
+    void setY(float y);
+    void setX(float x);
+    void setMove(int num, bool left);
 };
 
 

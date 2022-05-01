@@ -14,8 +14,6 @@ private:
     int currentFrame;
     std::string textureID;
 public:
-    SpriteAnimation();
-
     virtual void update(float dt);
     void draw(float x, float y, int spriteWidth, int spriteHeight, float xScale = 1, float yScale = 1, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void setProperties(std::string textureID, int spriteRow, int frameCount, int animationSpeed);

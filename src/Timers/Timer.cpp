@@ -10,7 +10,8 @@
 Timer* Timer::instance = nullptr;
 
 Timer *Timer::getInstance() {
-    if (instance == nullptr) instance = new Timer();
+    if (instance == nullptr)
+        instance = new Timer();
     return instance;
 }
 
@@ -23,7 +24,7 @@ void Timer::tick(){
 }
 
 void Timer::displayTime() {
-    unsigned int seconds = SDL_GetTicks()/1000 - Play::getInstance()->getStartTime();
+    unsigned int seconds = SDL_GetTicks()/1000 - Play::getInstance()->getStartTime() + Play::getInstance()->getCurrentTime();
     int minutes = 0;
     while (seconds >= 60){
         minutes++;
@@ -36,3 +37,5 @@ void Timer::displayTime() {
 float Timer::getDeltaTime() const{
     return deltaTime;
 }
+
+int Timer::getCurrentTime() {return SDL_GetTicks()/1000 - Play::getInstance()->getStartTime();}

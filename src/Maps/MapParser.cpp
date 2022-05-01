@@ -4,6 +4,7 @@
 
 #include "MapParser.h"
 
+
 MapParser *MapParser::instance = nullptr;
 
 MapParser *MapParser::getInstance() {
@@ -11,11 +12,7 @@ MapParser *MapParser::getInstance() {
     return instance;
 }
 
-MapParser::MapParser() {
-
-}
-
-bool MapParser::load(std::string id, std::string source) {
+bool MapParser::load(const std::string& id, const std::string& source) {
     return parse(id, source);
 }
 
@@ -26,7 +23,7 @@ void MapParser::clean() {
     mapDict.clear();
 }
 
-bool MapParser::parse(std::string id, std::string source) {
+bool MapParser::parse(const std::string& id, const std::string& source) {
     TiXmlDocument xml;
     xml.LoadFile(source);
 

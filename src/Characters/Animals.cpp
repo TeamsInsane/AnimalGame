@@ -31,7 +31,7 @@ Animals::Animals(Properties *properties) : Character(properties) {
 void Animals::draw() {
     animation->draw(transform->x, transform->y, width,height, 1, 1, flip);
 
-    collider->drawBox();
+    //collider->drawBox();
 }
 
 void Animals::clean() {

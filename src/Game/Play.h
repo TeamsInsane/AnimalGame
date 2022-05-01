@@ -27,7 +27,7 @@ private:
     int index;
     int delay;
     bool initialized;
-    int startTime;
+    int startTime, currentTime;
     int safeX1, safeX2, safeY;
     SDL_Texture *heartTexture;
     SDL_Renderer *renderer;
@@ -42,38 +42,38 @@ public:
     static Play *getInstance();
 
     Animals *renderAnimal();
+    Enemy *renderEnemy();
 
     void gameUpdate();
-
     void gameRender();
-
-    void gameInit(std::string id, std::string src, SDL_Renderer *renderer);
-
+    void gameInit(const std::string& id, std::string src, SDL_Renderer *sdlRenderer);
     void gameClean();
 
-    std::string getPlayerNameForMenu();
-
-    float getPlayerPositionX();
-
-    float getPlayerPositionY();
-
-    bool getDisplayGameOver() const;
 
     void resetDisplayGameOver();
-
     void setSpawnLocations1();
-
-    Enemy * renderEnemy();
-
     void setEnemiesSpawn();
-
-    int getStartTime();
-
     void setSpawnLocations2();
-
-    bool getDisplayVictory();
-
     void endScreen(bool won);
+
+    int getStartTime() const;
+    bool getDisplayVictory() const;
+    std::vector<Enemy *> getEnemies();
+    int getSavedAnimals() const;
+    int getRemainingAnimals() const;
+    std::vector<Animals *> getAnimals();
+    int getHealth() const;
+    int getCurrentTime() const;
+    float getPlayerPositionX();
+    float getPlayerPositionY();
+    bool getDisplayGameOver() const;
+    std::string getPlayerNameForMenu();
+
+    void loadInformationData(int saved, int remaining, int prev);
+    void loadPlayerData(int health, float x, float y);
+    void loadAnimalData(float x, float y);
+    void loadClean();
+    void loadEnemyData(float x, float y, int moveCount, bool moveLeft);
 };
 
 
