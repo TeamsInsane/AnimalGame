@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 5. 04. 2022.
+// Created by TeamsInsane on 5. 04. 2022.
 //
 
 #include <fstream>
@@ -42,11 +42,11 @@ void Replay::displayMovement(){
 
     position.y -= 10;
 
-    player->setX(position.x);
-    player->setY(position.y);
+    player->setX(position.x - 16);
+    player->setY(position.y - 5);
     player->setCollider(position.x, position.y, 96, 96);
-    player->getOrigin()->x = position.x + 32 /2;
-    player->getOrigin()->y = position.y + 32 /2;
+    player->getOrigin()->x = position.x + 16;
+    player->getOrigin()->y = position.y + 16;
 
     data.seekg(sizeof(Position) * readCount, std::ios::beg);
     data.read((char *) &position, sizeof (position));
@@ -55,19 +55,17 @@ void Replay::displayMovement(){
         safeX = position.x;
         safeY = position.y;
         if (!initialized) {
-            SDL_Log("TEMPTEXT -> WATCHING REPLAY");
             char tempText[] = "Watching a replay!";
             replayText.initCenter(renderer, 200, 50, tempText);
             initialized = true;
         }
     } else {
-        player->setX(safeX);
-        player->setY(safeY);
+        player->setX(safeX - 16);
+        player->setY(safeY - 5);
         player->setCollider(safeX, safeY, 96, 96);
-        player->getOrigin()->x = safeX + 32 /2;
-        player->getOrigin()->y = safeY + 32 /2;
+        player->getOrigin()->x = safeX + 16;
+        player->getOrigin()->y = safeY + 16;
         if (initialized) {
-            SDL_Log("TEMPTEXT -> REPLAY FINISHED");
             char tempText[] = "Replay finished!";
             replayText.initCenter(renderer, 200, 50, tempText);
             initialized = false;

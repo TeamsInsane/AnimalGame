@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 5. 04. 2022.
+// Created by TeamsInsane on 5. 04. 2022.
 //
 
 #ifndef ANIMALGAME_REPLAY_H
