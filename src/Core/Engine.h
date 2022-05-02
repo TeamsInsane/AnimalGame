@@ -8,7 +8,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "../Maps/GameMap.h"
-#include "../Objects/GameObject.h"
 #include "../Maps/ImgLayer.h"
 #include "../Game/Menu.h"
 

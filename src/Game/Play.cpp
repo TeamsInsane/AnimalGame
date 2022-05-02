@@ -30,7 +30,7 @@ void Play::gameInit(const std::string& id, const std::string& src, SDL_Renderer 
     int y;
 
     if (Engine::getInstance()->getLevel() == 1) {
-        startTime = SDL_GetTicks() / 1000;
+        calculateStartTime();
         enemies.push_back(new Enemy(new Properties("ghost", 1800, 2080, 32, 32)));
         setSpawnLocations1();
         y = 2150;
@@ -178,7 +178,7 @@ void Play::gameUpdate(){
 
     levelMap->update();
 
-    if (remainingAnimals <= 6){
+    if (remainingAnimals <= 0){
         if (Engine::getInstance()->getLevel() == 1) {
             MapParser::getInstance()->clean();
             gameClean();
@@ -357,3 +357,7 @@ float Play::getPlayerPositionX() {return player->getOrigin()->x;}
 float Play::getPlayerPositionY() {return player->getOrigin()->y;}
 bool Play::getDisplayGameOver() const {return displayGameOver;}
 int Play::getSavedAnimals() const {return savedAnimals;}
+
+void Play::calculateStartTime(){
+    startTime = SDL_GetTicks() / 1000;
+}

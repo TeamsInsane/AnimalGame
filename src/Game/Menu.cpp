@@ -135,6 +135,7 @@ void Menu::update() {
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_SPACE) && position == 4) {
         displayGame = true;
         displayMenu = false;
+        Play::getInstance()->calculateStartTime();
         Save::getInstance()->loadGameplay();
         SoundManager::getInstance()->turnOnMusic();
     }

@@ -76,6 +76,8 @@ public:
     void loadAnimalData(float x, float y);
     void loadClean();
     void loadEnemyData(float x, float y, int moveCount, bool moveLeft);
+
+    void calculateStartTime();
 };
 
 
