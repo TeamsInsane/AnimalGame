@@ -6,6 +6,7 @@
 #include "../Game/Play.h"
 #include "../Timers/Timer.h"
 #include <fstream>
+#include <sys/stat.h>
 
 Save *Save::instance = nullptr;
 
@@ -15,25 +16,29 @@ Save *Save::getInstance() {
 }
 
 void Save::saveGameplay() {
+    if (!Engine::getInstance()->getInitialized()){
+        SDL_Log("Nothing to save!");
+        return;
+    }
     struct SaveInformation saveInformation = getInformationData();
-    std::ofstream data("Save.bin", std::ios::binary);
+    std::ofstream data("Files/SaveFiles/Save.bin", std::ios::binary);
     data.write((char *) &saveInformation, sizeof saveInformation);
     data.close();
 
     struct PlayerInformation playerInformation = getPlayerData();
-    std::ofstream playerData("PlayerSave.bin", std::ios::binary);
+    std::ofstream playerData("Files/SaveFiles/PlayerSave.bin", std::ios::binary);
     playerData.write((char *) &playerInformation, sizeof playerInformation);
     playerData.close();
 
     std::vector<AnimalInformation> animalInformation = getAnimalData();
-    std::ofstream animalSave("AnimalSave.bin", std::ios::binary);
+    std::ofstream animalSave("Files/SaveFiles/AnimalSave.bin", std::ios::binary);
     for(int i = 0; i < animalInformation.size(); i++)
         animalSave.write((char *) &animalInformation[i], sizeof animalInformation[i]);
 
     animalSave.close();
 
     std::vector<EnemyInformation> enemyInformation = getEnemyData();
-    std::ofstream enemyData("EnemySave.bin", std::ios::binary);
+    std::ofstream enemyData("Files/SaveFiles/EnemySave.bin", std::ios::binary);
     for(int i = 0; i < enemyInformation.size(); i++)
         enemyData.write((char *) &enemyInformation[i], sizeof enemyInformation[i]);
 
@@ -42,7 +47,12 @@ void Save::saveGameplay() {
 
 void Save::loadGameplay() {
     struct SaveInformation saveInformation = SaveInformation();
-    std::ifstream data("Save.bin", std::ios::binary);
+    std::ifstream data("Files/SaveFiles/Save.bin", std::ios::binary);
+    if (!data.is_open()){
+        SDL_Log("Couldn't open file!");
+        return;
+    }
+
     data.read((char *) &saveInformation, sizeof saveInformation);
     data.close();
 
@@ -57,14 +67,14 @@ void Save::loadGameplay() {
     Play::getInstance()->loadClean();
 
     struct PlayerInformation playerInformation = PlayerInformation();
-    std::ifstream playerData("PlayerSave.bin", std::ios::binary);
+    std::ifstream playerData("Files/SaveFiles/PlayerSave.bin", std::ios::binary);
     playerData.read((char *) &playerInformation, sizeof playerInformation);
     playerData.close();
 
     Play::getInstance()->loadPlayerData(playerInformation.health, playerInformation.x - 16, playerInformation.y - 45);
 
     std::vector<AnimalInformation> animalInformation;
-    std::ifstream animalSave("AnimalSave.bin", std::ios::binary);
+    std::ifstream animalSave("Files/SaveFiles/AnimalSave.bin", std::ios::binary);
     struct AnimalInformation animalTemp = AnimalInformation();
     while (animalSave.read((char *) &animalTemp, sizeof animalTemp))
         animalInformation.push_back(animalTemp);
@@ -74,7 +84,7 @@ void Save::loadGameplay() {
         Play::getInstance()->loadAnimalData(animalInformation[i].x - 16, animalInformation[i].y - 45);
 
     std::vector<EnemyInformation> enemyInformation;
-    std::ifstream enemyData("EnemySave.bin", std::ios::binary);
+    std::ifstream enemyData("Files/SaveFiles/EnemySave.bin", std::ios::binary);
     struct EnemyInformation enemyTemp = EnemyInformation();
     while (enemyData.read((char *) &enemyTemp, sizeof enemyTemp))
         enemyInformation.push_back(enemyTemp);

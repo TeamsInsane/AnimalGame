@@ -18,7 +18,7 @@ Replay *Replay::getInstance() {
 }
 
 void Replay::saveMovement(){
-    std::ofstream data("Replay.bin", std::ios::app | std::ios::binary);
+    std::ofstream data("Files/ReplayFiles/Replay.bin", std::ios::app | std::ios::binary);
     Position position = Position();
     position.x = Play::getInstance()->getPlayerPositionX();
     position.y = Play::getInstance()->getPlayerPositionY();
@@ -28,7 +28,7 @@ void Replay::saveMovement(){
 
 void Replay::displayMovement(){
 
-    std::ifstream data("Replay.bin", std::ios::binary);
+    std::ifstream data("Files/ReplayFiles/Replay.bin", std::ios::binary);
     if (!data.is_open()){
         SDL_Log("Couldn't open or find the data!");
         return;
@@ -77,6 +77,7 @@ void Replay::displayMovement(){
 
 void Replay::initReplay(SDL_Renderer *sdlRenderer){
     readCount = 0;
+    initialized = false;
 
     char tempText[] = "Replay finished!";
     replayText.initCenter(sdlRenderer, 200, 50, tempText);
@@ -94,7 +95,7 @@ void Replay::initReplay(SDL_Renderer *sdlRenderer){
         exit(EXIT_FAILURE);
     }
 
-    std::ifstream data("Replay.txt");
+    std::ifstream data("Files/ReplayFiles/Replay.txt");
     data >> lvl;
     data.close();
 
@@ -132,7 +133,6 @@ void Replay::update(){
     float dt = Timer::getInstance()->getDeltaTime();
     displayMovement();
     player->setAnimationSate(dt);
-    SoundManager::getInstance()->update();
     Camera::getInstance()->setTarget(player->getOrigin());
     Camera::getInstance()->update();
     levelMap->update();

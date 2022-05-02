@@ -22,7 +22,7 @@ Play *Play::getInstance() {
 }
 
 void Play::gameInit(const std::string& id, std::string src, SDL_Renderer *sdlRenderer){
-    std::ofstream replayData("Replay.txt");
+    std::ofstream replayData("Files/ReplayFiles/Replay.txt");
     replayData << Engine::getInstance()->getLevel() << std::endl;
     replayData.close();
     remove("Replay.bin");
@@ -129,7 +129,6 @@ void Play::gameUpdate(){
     for (int i = 0; i != enemies.size(); i++) enemies[i]->update(dt);
     player->update(dt);
     for(int i = 0; i < animals.size(); i++) animals[i]->update(dt);
-    SoundManager::getInstance()->update();
 
     SDL_Rect playerRect = player->getBox();
 
@@ -191,6 +190,7 @@ void Play::gameUpdate(){
 }
 
 void Play::gameClean(){
+    SoundManager::getInstance()->turnOffMusic();
     if (player != nullptr) {
         Leaderboard::getInstance()->addToFile(player->getName(), savedAnimals);
         player->clean();
@@ -212,9 +212,8 @@ void Play::endScreen(bool won){
     if (!initialized){
         Engine::getInstance()->setLevel(1);
         Menu::getInstance()->resetDisplayGame();
-        char tempText[50];
+        char tempText[50] = "GAME OVER";
         if (won) strcpy(tempText, "You won");
-        else strcpy(tempText, "GAME OVER!");
         gameOverText.initCenter(renderer, SCREEN_HEIGHT / 2, 100, tempText);
         SDL_Surface *surface = IMG_Load("../assets/images/victory.png");
         if (won) victoryScreen = SDL_CreateTextureFromSurface(Engine::getInstance()->getRenderer(), surface);

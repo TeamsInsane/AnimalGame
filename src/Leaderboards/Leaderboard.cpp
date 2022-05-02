@@ -7,6 +7,7 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "Leaderboard.h"
+#include <sys/stat.h>
 
 Leaderboard *Leaderboard::instance = nullptr;
 
@@ -17,7 +18,7 @@ Leaderboard *Leaderboard::getInstance() {
 
 void Leaderboard::updateMap(){
     map.clear();
-    std::ifstream data("Leaderboard.txt");
+    std::ifstream data("Files/LeaderboardFiles/Leaderboard.txt");
     if (!data.is_open()){
         SDL_Log("File was not found!");
         return;
@@ -39,7 +40,7 @@ void Leaderboard::addToFile(const std::string& name, int score){
 
     if (!found) map[name] = score;
 
-    std::ofstream data("Leaderboard.txt");
+    std::ofstream data("Files/LeaderboardFiles/Leaderboard.txt");
     while (!map.empty()) {
         std::string highName = map.begin()->first;
         int highScore = map.begin()->second;
@@ -68,7 +69,7 @@ void Leaderboard::init(SDL_Renderer *sdlRenderer){
     leaderboard[0].initCenter(sdlRenderer, 40, 30, tempText);
     leaderboardCount = 1;
 
-    std::ifstream data("Leaderboard.txt");
+    std::ifstream data("Files/LeaderboardFiles/Leaderboard.txt");
     if (!data.is_open()){
         SDL_Log("Couldn't open the file!");
         return;

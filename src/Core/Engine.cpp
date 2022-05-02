@@ -3,6 +3,7 @@
 //
 
 #include <fstream>
+#include <sys/stat.h>
 #include "Engine.h"
 #include "../Characters/Warrior.h"
 #include "../Characters/Animals.h"
@@ -51,12 +52,19 @@ bool Engine::init(){
     level = 1;
     delay = 0;
     initialized = false;
+
+    mkdir("Files/");
+    mkdir("Files/SaveFiles/");
+    mkdir("Files/ReplayFiles");
+    mkdir("Files/LeaderboardFiles");
+
     running = true;
     return running;
 }
 
 void Engine::update(){
     delay++;
+    SoundManager::getInstance()->update();
     if (Input::getInstance()->getKeyDown(SDL_SCANCODE_F11) && delay > 100){
         if (!fullscreen){
             SDL_Log("Changed screen to fullscreen");
@@ -90,7 +98,7 @@ void Engine::render(){
             case 1:
                 if (!initialized) {
                     SDL_Log("Test");
-                    std::ofstream data("Replay.txt");
+                    std::ofstream data("Files/ReplayFiles/Replay.txt");
                     data.close();
                     Play::getInstance()->gameInit("Level1", "../assets/maps/level1.tmx", renderer);
                     initialized = true;
