@@ -284,7 +284,7 @@ void Play::setSpawnLocations1(){
     animalSpawnLocations.insert(std::pair<int, int>(2230, 1937));
     animalSpawnLocations.insert(std::pair<int, int>(1470, 1850));
     animalSpawnLocations.insert(std::pair<int, int>(1150, 1680));
-    animalSpawnLocations.insert(std::pair<int, int>(2100, 1750));
+    animalSpawnLocations.insert(std::pair<int, int>(2100, 1745));
     animalSpawnLocations.insert(std::pair<int, int>(1440, 1490));
     animalSpawnLocations.insert(std::pair<int, int>(2240, 1520));
     animalSpawnLocations.insert(std::pair<int, int>(1910, 1350));
