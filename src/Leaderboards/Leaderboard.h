@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 4. 04. 2022.
+// Created by TeamsInsane on 4. 04. 2022.
 //
 
 #ifndef ANIMALGAME_LEADERBOARD_H

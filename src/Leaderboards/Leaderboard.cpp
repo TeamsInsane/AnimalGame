@@ -25,14 +25,8 @@ void Leaderboard::updateMap(){
 
     std::string name;
     int score;
-    while (data >> name >> score){
-        SDL_Log("From file name: %s and score %i: ", name.c_str(), score);
+    while (data >> name >> score)
         map[name] = score;
-    }
-
-    for(auto it = map.begin(); it != map.end(); it++){
-        SDL_Log("Name -> %s and score -> %i", it->first.c_str(), it->second);
-    }
 
     data.close();
 }
@@ -94,8 +88,6 @@ void Leaderboard::init(SDL_Renderer *sdlRenderer){
         y+=100;
         if (leaderboardCount >= 6) break;
     }
-
-    SDL_Log("Leaderboard count: %i", leaderboardCount);
 
     data.close();
 }

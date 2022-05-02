@@ -1,5 +1,5 @@
 //
-// Created by Uporabnik on 30. 04. 2022.
+// Created by TeamsInsane on 30. 04. 2022.
 //
 
 #ifndef ANIMALGAME_SAVE_H

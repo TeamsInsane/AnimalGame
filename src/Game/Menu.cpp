@@ -11,7 +11,6 @@
 #include "../Leaderboards/Leaderboard.h"
 #include "../SaveLoad/Save.h"
 #include "../Sound/SoundManager.h"
-#include <fstream>
 
 Menu *Menu::instance = nullptr;
 
@@ -203,4 +202,7 @@ bool Menu::getDisplayLeaderboard() const {return displayLeaderboard;}
 bool Menu::getDisplayReplay() const {return displayReplay;}
 bool Menu::getDisplayMenu() const {return displayMenu;}
 void Menu::resetDisplayGame() {displayGame = false;}
-std::string Menu::getName() {return playerName;}
+std::string Menu::getName() {
+    if (playerName.empty()) playerName = "Guest";
+    return playerName;
+}

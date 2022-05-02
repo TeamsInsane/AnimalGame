@@ -197,13 +197,9 @@ void Play::gameClean(){
         delete player;
         player = nullptr;
     }
-    for(int i = 0; i < animals.size(); i++) {
-        animals[i]->clean();
-    }
+    for(int i = 0; i < animals.size(); i++) animals[i]->clean();
     animals.clear();
-    for (int i = 0; i != enemies.size(); i++){
-        enemies[i]->clean();
-    }
+    for (int i = 0; i != enemies.size(); i++) enemies[i]->clean();
     enemies.clear();
     animalSpawnLocations.clear();
     enemySpawnLocations.clear();
