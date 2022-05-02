@@ -22,6 +22,7 @@ private:
     Warrior *player;
     std::vector<Enemy*> enemies;
     std::vector<Animals*> animals;
+    int savedAnimalsPerLevel;
     int savedAnimals;
     int remainingAnimals;
     int index;
@@ -46,7 +47,7 @@ public:
 
     void gameUpdate();
     void gameRender();
-    void gameInit(const std::string& id, std::string src, SDL_Renderer *sdlRenderer);
+    void gameInit(const std::string& id, const std::string& src, SDL_Renderer *sdlRenderer);
     void gameClean();
 
 
@@ -60,6 +61,7 @@ public:
     bool getDisplayVictory() const;
     std::vector<Enemy *> getEnemies();
     int getSavedAnimals() const;
+    int getSavedAnimalsPerLevel() const;
     int getRemainingAnimals() const;
     std::vector<Animals *> getAnimals();
     int getHealth() const;
@@ -69,7 +71,7 @@ public:
     bool getDisplayGameOver() const;
     std::string getPlayerNameForMenu();
 
-    void loadInformationData(int saved, int remaining, int prev);
+    void loadInformationData(int savedPerLevel, int saved, int remaining, int prev);
     void loadPlayerData(int health, float x, float y);
     void loadAnimalData(float x, float y);
     void loadClean();

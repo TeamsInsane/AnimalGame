@@ -11,7 +11,7 @@
 struct SaveInformation{
     int level;
     int remainingAnimals;
-    int savedAnimals;
+    int savedAnimalsPerLevel, savedAnimals;
     int prevTime;
 };
 

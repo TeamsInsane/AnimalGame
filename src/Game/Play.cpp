@@ -21,11 +21,11 @@ Play *Play::getInstance() {
     return instance;
 }
 
-void Play::gameInit(const std::string& id, std::string src, SDL_Renderer *sdlRenderer){
+void Play::gameInit(const std::string& id, const std::string& src, SDL_Renderer *sdlRenderer){
     std::ofstream replayData("Files/ReplayFiles/Replay.txt");
     replayData << Engine::getInstance()->getLevel() << std::endl;
     replayData.close();
-    remove("Replay.bin");
+    remove("Files/ReplayFiles/Replay.bin");
     this->renderer = sdlRenderer;
     int y;
 
@@ -37,18 +37,18 @@ void Play::gameInit(const std::string& id, std::string src, SDL_Renderer *sdlRen
         safeX1 = 1390;
         safeX2 = 1620;
         safeY = 2150;
+        savedAnimals = 0;
     } else {
         setSpawnLocations2();
-        y = 2050;
+        y = 2045;
         safeX1 = 1100;
         safeX2 = 1365;
-        safeY = 1995;
+        safeY = 2000;
         enemies.push_back(new Enemy(new Properties("ghost", 830, 1730, 32, 32)));
         enemies.push_back(new Enemy(new Properties("ghost", 2290, 1730, 32, 32)));
     }
 
-    //player = new Warrior(new Properties("player", rand()%(2800-1040)+1040, y, 32, 32));
-    player = new Warrior(new Properties("player", 1650, y, 32, 32));
+    player = new Warrior(new Properties("player", rand()%(2800-1040)+1040, y, 32, 32));
 
     player->setName(Menu::getInstance()->getName());
 
@@ -65,11 +65,13 @@ void Play::gameInit(const std::string& id, std::string src, SDL_Renderer *sdlRen
     initialized = false;
     displayGameOver = false;
     displayVictory = false;
-    savedAnimals = 0;
+    savedAnimalsPerLevel = 0;
     remainingAnimals = 7;
     currentTime = 0;
     index = -1;
     delay = 0;
+
+    SoundManager::getInstance()->turnOnMusic();
 
     heartTexture = SDL_CreateTextureFromSurface(sdlRenderer, IMG_Load("../assets/menu/hearts.png"));
 
@@ -115,7 +117,7 @@ void Play::gameRender(){
     Text tempText = Text();
     std::string temp = "x: " + std::to_string(player->getOrigin()->x) + " y: " + std::to_string(player->getOrigin()->y);
     tempText.init(renderer, 0, 30, temp.c_str());
-    temp = "Saved animals: " + std::to_string(savedAnimals) + ", remaining animals: " + std::to_string(remainingAnimals);
+    temp = "Saved animals: " + std::to_string(savedAnimalsPerLevel) + ", remaining animals: " + std::to_string(remainingAnimals);
     tempText.init(renderer, 0, 0, temp.c_str());
 
     Timer::getInstance()->displayTime();
@@ -143,6 +145,7 @@ void Play::gameUpdate(){
             animals[index]->setX(player->getOrigin()->x - 15);
             animals[index]->setY(player->getOrigin()->y - 30);
             if (animalRect.x > safeX1 && animalRect.x < safeX2 && animalRect.y > safeY) {
+                savedAnimalsPerLevel++;
                 savedAnimals++;
                 remainingAnimals--;
                 for(int i = 0; i < rand()%(5-2)+2; i++) enemies.push_back(renderEnemy());
@@ -175,7 +178,7 @@ void Play::gameUpdate(){
 
     levelMap->update();
 
-    if (remainingAnimals <= 5){
+    if (remainingAnimals <= 6){
         if (Engine::getInstance()->getLevel() == 1) {
             MapParser::getInstance()->clean();
             gameClean();
@@ -309,9 +312,10 @@ void Play::setEnemiesSpawn(){
     for(auto it = animalSpawnLocations.begin(); it != animalSpawnLocations.end(); it++) enemySpawnLocations.insert(std::pair<int, int>(it->first, it->second));
 }
 
-void Play::loadInformationData(int saved, int remaining, int prev){
-    savedAnimals = saved;
+void Play::loadInformationData(int savedPerLevel, int saved, int remaining, int prev){
+    savedAnimalsPerLevel = savedPerLevel;
     remainingAnimals = remaining;
+    savedAnimals = saved;
     currentTime = prev;
 }
 
@@ -343,7 +347,7 @@ void Play::loadClean() {
 std::vector<Enemy*> Play::getEnemies(){return enemies;}
 std::vector<Animals*> Play::getAnimals(){return animals;}
 int Play::getRemainingAnimals() const{return remainingAnimals;}
-int Play::getSavedAnimals() const{ return savedAnimals;}
+int Play::getSavedAnimalsPerLevel() const{ return savedAnimalsPerLevel;}
 int Play::getHealth() const{return player->getHealth();}
 bool Play::getDisplayVictory() const{return displayVictory;}
 int Play::getCurrentTime() const {return currentTime;}
@@ -352,3 +356,4 @@ std::string Play::getPlayerNameForMenu() {return player->getName();}
 float Play::getPlayerPositionX() {return player->getOrigin()->x;}
 float Play::getPlayerPositionY() {return player->getOrigin()->y;}
 bool Play::getDisplayGameOver() const {return displayGameOver;}
+int Play::getSavedAnimals() const {return savedAnimals;}

@@ -62,7 +62,7 @@ void Save::loadGameplay() {
     else
         Play::getInstance()->gameInit("Level2", "../assets/maps/level2.tmx", Engine::getInstance()->getRenderer());
     Engine::getInstance()->changeInitialized(true);
-    Play::getInstance()->loadInformationData(saveInformation.savedAnimals, saveInformation.remainingAnimals, saveInformation.prevTime);
+    Play::getInstance()->loadInformationData(saveInformation.savedAnimalsPerLevel, saveInformation.savedAnimals, saveInformation.remainingAnimals, saveInformation.prevTime);
 
     Play::getInstance()->loadClean();
 
@@ -98,6 +98,7 @@ void Save::loadGameplay() {
 SaveInformation Save::getInformationData(){
     struct SaveInformation temp = SaveInformation();
     temp.level = Engine::getInstance()->getLevel();
+    temp.savedAnimalsPerLevel = Play::getInstance()->getSavedAnimalsPerLevel();
     temp.savedAnimals = Play::getInstance()->getSavedAnimals();
     temp.remainingAnimals = Play::getInstance()->getRemainingAnimals();
     temp.prevTime = Timer::getInstance()->getCurrentTime();
